@@ -1,1 +1,8 @@
-
+Background
+dice
+player
+update box
+update "Turn" status
+clickable 
+function for game
+instructions / end game
