@@ -1,9 +1,9 @@
 // All required files are included
-#include<iostream>
-#include<conio.h>
-#include<stdlib.h>
-#include<graphics.h>
-#include<windows.h>
+#include <iostream>
+#include <conio.h>
+#include <stdlib.h>
+#include <graphics.h>
+#include <windows.h>
 #include <iomanip>
 
 using namespace std;
@@ -18,7 +18,8 @@ void instructions();
 void endGame();
 void gameFunction();
 void playerOne();
-void playerTwo();
+void bot();
+int throwDice();
 
 // Global Variable Declarations
 int playerOnePosition = 1;
@@ -107,6 +108,7 @@ void startGame()
 
 
     gameFunction();
+    throwDice();
 }
 
 
@@ -131,22 +133,22 @@ void endGame()
 void gameFunction()
 {
     // 10 19 51 78 ladders
-    int randNo = 3;
-    playerOnePosition += randNo;
+    int randomNumber = throwDice();
+    playerOnePosition += randomNumber;
 
     if(playerOnePosition == 10)
     {
-        circle(250, 200, 8);
+//        circle(250, 200, 8);
     }
-    else if(randNo == 19)
+    else if(playerOnePosition == 19)
     {
 
     }
-    else if(randNo == 51)
+    else if(playerOnePosition == 51)
     {
 
     }
-    else if(randNo == 78)
+    else if(playerOnePosition == 78)
     {
 
     }
@@ -155,7 +157,12 @@ void playerOne()
 {
 
 }
-void playerTwo()
+void bot()
+{
+
+}
+
+int throwDice()
 {
 
 }
