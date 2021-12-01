@@ -26,6 +26,7 @@ void gameFunction();
 void playerOne();
 void bot();
 int throwDice();
+void moveFromLadderOrLadder(char, int, int, char);
 
 // Global Variable Declarations
 static int playerOnePosition = 1;
@@ -89,7 +90,6 @@ int main()
    outstreamxy(565,450);
 //    outtextxy(695,550,"QUIT GAME");
 
-
     cout << "Enter 1: New Game." << endl;
     cout << "Enter 2: Instructions" << endl;
     cout << "Enter 3: Exit Game" << endl;
@@ -115,7 +115,6 @@ int main()
             closegraph();
             return 0;
     }
-
 }
 
 void startGame()
@@ -194,7 +193,6 @@ void startGame()
 
 
     // Created Demo Players
-
     playerOne();
     bot();
 
@@ -235,356 +233,403 @@ void gameFunction()
 //        getch();
 //    }
 
-// FOR PLAYER TO MOVE
-//    for(int i = 1; i <= 56;i ++)
-//    {
-//        cleardevice();
-//        setcolor(YELLOW);
-//        circle(110+i, 640, 7);
-//        delay(70);
-//    }
-
-
     cout << "player position at start : " << playerOnePosition << endl;
-    while (playerOnePosition != 100)
+    cout << "Bot position at start : " << botPosition << endl;
+    getch();
+
+    while (playerOnePosition != 100 || botPosition != 100)
     {
         // WHEN USER CLICK ON THROW DICE FOR 1st TIME
-        int randomNumber = throwDice();
-        cout << "Random Number : " << randomNumber << endl;
-        playerOnePosition += randomNumber;
-        cout << "Player position after adding with above Random Number : " << playerOnePosition << endl;
+        int randomNumberForPlayerOne = throwDice();
+        cout << "Random Number for PlayerOne : " << randomNumberForPlayerOne << endl;
+        getch();
+        int randomNumberForBot = throwDice();
+        cout << "Random Number for Bot : " << randomNumberForBot << endl << endl;
+        getch();
 
-//        randomNumber = 1;
-//        playerOnePosition =99;
 
-        switch(randomNumber)
+        if(randomNumberForPlayerOne + playerOnePosition > 100){}
+        else if(randomNumberForPlayerOne + playerOnePosition == 100)
+        {
+            cout << "player won" << endl;
+            getch();
+            break;
+        }
+        else
+        {
+            playerOnePosition += randomNumberForPlayerOne;
+            cout << "Player position after adding with above Random Number : " << playerOnePosition << endl;
+        }
+
+//        randomNumberForPlayerOne = 1;
+//        playerOnePosition = 99;
+
+        switch(randomNumberForPlayerOne)
         {
             case 1 :
-                if(playerOnePosition == 10)
-                {
-                    playerOnePosition = 35;
-                    setcolor(10);
-                    circle(400, 492, 7);
-                }
-                else if(playerOnePosition == 19)
-                {
-                    playerOnePosition = 74;
-                    setcolor(10);
-                    circle(460, 300, 7);
-                }
-                else if(playerOnePosition == 50)
-                {
-                    playerOnePosition = 88;
-                    setcolor(10);
-                    circle(515, 252, 7);
-                }
-                else if(playerOnePosition == 78)
-                {
-                    playerOnePosition = 95;
-                    setcolor(10);
-                    circle(402, 205, 7);
-                }
+                if(playerOnePosition == 10) {moveFromLadderOrLadder('P',1,10,'L');}
+                else if(playerOnePosition == 19){moveFromLadderOrLadder('P',1,19,'L');}
+                else if(playerOnePosition == 50){moveFromLadderOrLadder('P',1,50,'L');}
+                else if(playerOnePosition == 78){moveFromLadderOrLadder('P',1,78,'L');}
 // SNAKE
-                else if(playerOnePosition == 44)
-                {
-                    playerOnePosition = 4;
-                    setcolor(10);
-                    circle(400, 640, 7);
-                }
-                else if(playerOnePosition == 64)
-                {
-                    playerOnePosition = 40;
-                    setcolor(10);
-                    circle(110, 492, 7);
-                }
-                else if(playerOnePosition == 90)
-                {
-                    playerOnePosition = 53;
-                    setcolor(10);
-                    circle(515, 397, 7);
-                }
-                else if(playerOnePosition == 99)
-                {
-                    playerOnePosition = 28;
-                    setcolor(10);
-                    circle(513, 542, 7);
-                }
+                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',1,44,'S');}
+                else if(playerOnePosition == 64) {moveFromLadderOrLadder('P',1,64,'S');}
+                else if(playerOnePosition == 90) {moveFromLadderOrLadder('P',1,90,'S');}
+                else if(playerOnePosition == 99) {moveFromLadderOrLadder('P',1,99,'S');}
 
             case 2 :
-                if(playerOnePosition == 10)
-                {
-                    playerOnePosition = 35;
-                    setcolor(10);
-                    circle(400, 492, 7);
-                }
-                else if(playerOnePosition == 19)
-                {
-                    playerOnePosition = 74;
-                    setcolor(10);
-                    circle(460, 300, 7);
-                }
-                else if(playerOnePosition == 50)
-                {
-                    playerOnePosition = 88;
-                    setcolor(10);
-                    circle(515, 252, 7);
-                }
-                else if(playerOnePosition == 78)
-                {
-                    playerOnePosition = 95;
-                    setcolor(10);
-                    circle(402, 205, 7);
-                }
-
-                else if(playerOnePosition == 44)
-                {
-                    playerOnePosition = 4;
-                    setcolor(10);
-                    circle(400, 640, 7);
-                }
-                else if(playerOnePosition == 64)
-                {
-                    playerOnePosition = 40;
-                    setcolor(10);
-                    circle(110, 492, 7);
-                }
-                else if(playerOnePosition == 90)
-                {
-                    playerOnePosition = 53;
-                    setcolor(10);
-                    circle(515, 397, 7);
-                }
-                else if(playerOnePosition == 99)
-                {
-                    playerOnePosition = 28;
-                    setcolor(10);
-                    circle(513, 542, 7);
-                }
+                if(playerOnePosition == 10) {moveFromLadderOrLadder('P',2,10,'L');}
+                else if(playerOnePosition == 19){moveFromLadderOrLadder('P',2,19,'L');}
+                else if(playerOnePosition == 50){moveFromLadderOrLadder('P',2,50,'L');}
+                else if(playerOnePosition == 78){moveFromLadderOrLadder('P',2,78,'L');}
+// SNAKE
+                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',2,44,'S');}
+                else if(playerOnePosition == 64) {moveFromLadderOrLadder('P',2,64,'S');}
+                else if(playerOnePosition == 90) {moveFromLadderOrLadder('P',2,90,'S');}
+                else if(playerOnePosition == 99) {moveFromLadderOrLadder('P',2,99,'S');}
 
             case 3 :
-                if(playerOnePosition == 10)
-                {
-                    playerOnePosition = 35;
-                    setcolor(10);
-                    circle(400, 492, 7);
-                }
-                else if(playerOnePosition == 19)
-                {
-                    playerOnePosition = 74;
-                    setcolor(10);
-                    circle(460, 300, 7);
-                }
-                else if(playerOnePosition == 50)
-                {
-                    playerOnePosition = 88;
-                    setcolor(10);
-                    circle(515, 252, 7);
-                }
-                else if(playerOnePosition == 78)
-                {
-                    playerOnePosition = 95;
-                    setcolor(10);
-                    circle(402, 205, 7);
-                }
-
-                else if(playerOnePosition == 44)
-                {
-                    playerOnePosition = 4;
-                    setcolor(10);
-                    circle(400, 640, 7);
-                }
-                else if(playerOnePosition == 64)
-                {
-                    playerOnePosition = 40;
-                    setcolor(10);
-                    circle(110, 492, 7);
-                }
-                else if(playerOnePosition == 90)
-                {
-                    playerOnePosition = 53;
-                    setcolor(10);
-                    circle(515, 397, 7);
-                }
-                else if(playerOnePosition == 99)
-                {
-                    playerOnePosition = 28;
-                    setcolor(10);
-                    circle(513, 542, 7);
-                }
+                if(playerOnePosition == 10) {moveFromLadderOrLadder('P',3,10,'L');}
+                else if(playerOnePosition == 19){moveFromLadderOrLadder('P',3,19,'L');}
+                else if(playerOnePosition == 50){moveFromLadderOrLadder('P',3,50,'L');}
+                else if(playerOnePosition == 78){moveFromLadderOrLadder('P',3,78,'L');}
+// SNAKE
+                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',3,44,'S');}
+                else if(playerOnePosition == 64) {moveFromLadderOrLadder('P',3,64,'S');}
+                else if(playerOnePosition == 90) {moveFromLadderOrLadder('P',3,90,'S');}
+                else if(playerOnePosition == 99) {moveFromLadderOrLadder('P',3,99,'S');}
 
             case 4 :
-                if(playerOnePosition == 10)
-                {
-                    playerOnePosition = 35;
-                    setcolor(10);
-                    circle(400, 492, 7);
-                }
-                else if(playerOnePosition == 19)
-                {
-                    playerOnePosition = 74;
-                    setcolor(10);
-                    circle(460, 300, 7);
-                }
-                else if(playerOnePosition == 50)
-                {
-                    playerOnePosition = 88;
-                    setcolor(10);
-                    circle(515, 252, 7);
-                }
-                else if(playerOnePosition == 78)
-                {
-                    playerOnePosition = 95;
-                    setcolor(10);
-                    circle(402, 205, 7);
-                }
-
-                else if(playerOnePosition == 44)
-                {
-                    playerOnePosition = 4;
-                    setcolor(10);
-                    circle(400, 640, 7);
-                }
-                else if(playerOnePosition == 64)
-                {
-                    playerOnePosition = 40;
-                    setcolor(10);
-                    circle(110, 492, 7);
-                }
-                else if(playerOnePosition == 90)
-                {
-                    playerOnePosition = 53;
-                    setcolor(10);
-                    circle(515, 397, 7);
-                }
-                else if(playerOnePosition == 99)
-                {
-                    playerOnePosition = 28;
-                    setcolor(10);
-                    circle(513, 542, 7);
-                }
+                if(playerOnePosition == 10) {moveFromLadderOrLadder('P',4,10,'L');}
+                else if(playerOnePosition == 19){moveFromLadderOrLadder('P',4,19,'L');}
+                else if(playerOnePosition == 50){moveFromLadderOrLadder('P',4,50,'L');}
+                else if(playerOnePosition == 78){moveFromLadderOrLadder('P',4,78,'L');}
+// SNAKE
+                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',4,44,'S');}
+                else if(playerOnePosition == 64) {moveFromLadderOrLadder('P',4,64,'S');}
+                else if(playerOnePosition == 90) {moveFromLadderOrLadder('P',4,90,'S');}
+                else if(playerOnePosition == 99) {moveFromLadderOrLadder('P',4,99,'S');}
 
             case 5 :
-                if(playerOnePosition == 10)
-                {
-                    playerOnePosition = 35;
-                    setcolor(10);
-                    circle(400, 492, 7);
-                }
-                else if(playerOnePosition == 19)
-                {
-                    playerOnePosition = 74;
-                    setcolor(10);
-                    circle(460, 300, 7);
-                }
-                else if(playerOnePosition == 50)
-                {
-                    playerOnePosition = 88;
-                    setcolor(10);
-                    circle(515, 252, 7);
-                }
-                else if(playerOnePosition == 78)
-                {
-                    playerOnePosition = 95;
-                    setcolor(10);
-                    circle(402, 205, 7);
-                }
-
-                else if(playerOnePosition == 44)
-                {
-                    playerOnePosition = 4;
-                    setcolor(10);
-                    circle(400, 640, 7);
-                }
-                else if(playerOnePosition == 64)
-                {
-                    playerOnePosition = 40;
-                    setcolor(10);
-                    circle(110, 492, 7);
-                }
-                else if(playerOnePosition == 90)
-                {
-                    playerOnePosition = 53;
-                    setcolor(10);
-                    circle(515, 397, 7);
-                }
-                else if(playerOnePosition == 99)
-                {
-                    playerOnePosition = 28;
-                    setcolor(10);
-                    circle(513, 542, 7);
-                }
+                if(playerOnePosition == 10) {moveFromLadderOrLadder('P',5,10,'L');}
+                else if(playerOnePosition == 19){moveFromLadderOrLadder('P',5,19,'L');}
+                else if(playerOnePosition == 50){moveFromLadderOrLadder('P',5,50,'L');}
+                else if(playerOnePosition == 78){moveFromLadderOrLadder('P',5,78,'L');}
+// SNAKE
+                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',5,44,'S');}
+                else if(playerOnePosition == 64) {moveFromLadderOrLadder('P',5,64,'S');}
+                else if(playerOnePosition == 90) {moveFromLadderOrLadder('P',5,90,'S');}
+                else if(playerOnePosition == 99) {moveFromLadderOrLadder('P',5,99,'S');}
 
             case 6 :
-                if(playerOnePosition == 10)
-                {
-                    playerOnePosition = 35;
-                    setcolor(10);
-                    circle(400, 492, 7);
-                }
-                else if(playerOnePosition == 19)
-                {
-                    playerOnePosition = 74;
-                    setcolor(10);
-                    circle(460, 300, 7);
-                }
-                else if(playerOnePosition == 50)
-                {
-                    playerOnePosition = 88;
-                    setcolor(10);
-                    circle(515, 252, 7);
-                }
-                else if(playerOnePosition == 78)
-                {
-                    playerOnePosition = 95;
-                    setcolor(10);
-                    circle(402, 205, 7);
-                }
+                if(playerOnePosition == 10) {moveFromLadderOrLadder('P',6,10,'L');}
+                else if(playerOnePosition == 19){moveFromLadderOrLadder('P',6,19,'L');}
+                else if(playerOnePosition == 50){moveFromLadderOrLadder('P',6,50,'L');}
+                else if(playerOnePosition == 78){moveFromLadderOrLadder('P',6,78,'L');}
+// SNAKE
+                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',6,44,'S');}
+                else if(playerOnePosition == 64) {moveFromLadderOrLadder('P',6,64,'S');}
+                else if(playerOnePosition == 90) {moveFromLadderOrLadder('P',6,90,'S');}
+                else if(playerOnePosition == 99) {moveFromLadderOrLadder('P',6,99,'S');}
 
-                else if(playerOnePosition == 44)
-                {
-                    playerOnePosition = 4;
-                    setcolor(10);
-                    circle(400, 640, 7);
-                }
-                else if(playerOnePosition == 64)
-                {
-                    playerOnePosition = 40;
-                    setcolor(10);
-                    circle(110, 492, 7);
-                }
-                else if(playerOnePosition == 90)
-                {
-                    playerOnePosition = 53;
-                    setcolor(10);
-                    circle(515, 397, 7);
-                }
-                else if(playerOnePosition == 99)
-                {
-                    playerOnePosition = 28;
-                    setcolor(10);
-                    circle(513, 542, 7);
-                }
-        } // END OF SWTICH CASE
-    } // END OF WHILE LOOP
+        }// END OF SWTICH CASE FOR PLAYER ONE
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// BOT - MEGENTA COLOUR
+
+        if(randomNumberForBot + botPosition > 100)
+        {}
+        else if(randomNumberForBot + botPosition == 100)
+        {
+            cout << "bot won" << endl;
+            getch();
+            break;
+        }
+        else
+        {
+            botPosition += randomNumberForBot;
+            cout << "Bot position after adding with above Random Number : " << botPosition << endl;
+        }
+
+//    randomNumberForBot = 1;
+//    botPosition = 99;
+
+        switch(randomNumberForBot)
+        {
+            case 1 :
+                if(botPosition == 10) {moveFromLadderOrLadder('B',1,10,'L');}
+                else if(botPosition == 19){moveFromLadderOrLadder('B',1,19,'L');}
+                else if(botPosition == 50){moveFromLadderOrLadder('B',1,50,'L');}
+                else if(botPosition == 78){moveFromLadderOrLadder('B',1,78,'L');}
+                else if(botPosition == 44) {moveFromLadderOrLadder('B',1,44,'S');} // SNAKE
+                else if(botPosition == 64) {moveFromLadderOrLadder('B',1,64,'S');}
+                else if(botPosition == 90) {moveFromLadderOrLadder('B',1,90,'S');}
+                else if(botPosition == 99) {moveFromLadderOrLadder('B',1,99,'S');}
+
+            case 2 :
+                if(botPosition == 10) {moveFromLadderOrLadder('B',2,10,'L');}
+                else if(botPosition == 19){moveFromLadderOrLadder('B',2,19,'L');}
+                else if(botPosition == 50){moveFromLadderOrLadder('B',2,50,'L');}
+                else if(botPosition == 78){moveFromLadderOrLadder('B',2,78,'L');}
+                else if(botPosition == 44) {moveFromLadderOrLadder('B',2,44,'S');} // SNAKE
+                else if(botPosition == 64) {moveFromLadderOrLadder('B',2,64,'S');}
+                else if(botPosition == 90) {moveFromLadderOrLadder('B',2,90,'S');}
+                else if(botPosition == 99) {moveFromLadderOrLadder('B',2,99,'S');}
+
+            case 3 :
+                if(botPosition == 10) {moveFromLadderOrLadder('B',3,10,'L');}
+                else if(botPosition == 19){moveFromLadderOrLadder('B',3,19,'L');}
+                else if(botPosition == 50){moveFromLadderOrLadder('B',3,50,'L');}
+                else if(botPosition == 78){moveFromLadderOrLadder('B',3,78,'L');}
+                else if(botPosition == 44) {moveFromLadderOrLadder('B',3,44,'S');} // SNAKE
+                else if(botPosition == 64) {moveFromLadderOrLadder('B',3,64,'S');}
+                else if(botPosition == 90) {moveFromLadderOrLadder('B',3,90,'S');}
+                else if(botPosition == 99) {moveFromLadderOrLadder('B',3,99,'S');}
+
+            case 4 :
+                if(botPosition == 10) {moveFromLadderOrLadder('B',4,10,'L');}
+                else if(botPosition == 19){moveFromLadderOrLadder('B',4,19,'L');}
+                else if(botPosition == 50){moveFromLadderOrLadder('B',4,50,'L');}
+                else if(botPosition == 78){moveFromLadderOrLadder('B',4,78,'L');}
+                else if(botPosition == 44) {moveFromLadderOrLadder('B',4,44,'S');} // SNAKE
+                else if(botPosition == 64) {moveFromLadderOrLadder('B',4,64,'S');}
+                else if(botPosition == 90) {moveFromLadderOrLadder('B',4,90,'S');}
+                else if(botPosition == 99) {moveFromLadderOrLadder('B',4,99,'S');}
+
+            case 5 :
+                if(botPosition == 10) {moveFromLadderOrLadder('B',5,10,'L');}
+                else if(botPosition == 19){moveFromLadderOrLadder('B',5,19,'L');}
+                else if(botPosition == 50){moveFromLadderOrLadder('B',5,50,'L');}
+                else if(botPosition == 78){moveFromLadderOrLadder('B',5,78,'L');}
+                else if(botPosition == 44) {moveFromLadderOrLadder('B',5,44,'S');} // SNAKE
+                else if(botPosition == 64) {moveFromLadderOrLadder('B',5,64,'S');}
+                else if(botPosition == 90) {moveFromLadderOrLadder('B',5,90,'S');}
+                else if(botPosition == 99) {moveFromLadderOrLadder('B',5,99,'S');}
+
+            case 6 :
+                if(botPosition == 10) {moveFromLadderOrLadder('B',6,10,'L');}
+                else if(botPosition == 19){moveFromLadderOrLadder('B',6,19,'L');}
+                else if(botPosition == 50){moveFromLadderOrLadder('B',6,50,'L');}
+                else if(botPosition == 78){moveFromLadderOrLadder('B',6,78,'L');}
+                else if(botPosition == 44) {moveFromLadderOrLadder('B',6,44,'S');} // SNAKE
+                else if(botPosition == 64) {moveFromLadderOrLadder('B',6,64,'S');}
+                else if(botPosition == 90) {moveFromLadderOrLadder('B',6,90,'S');}
+                else if(botPosition == 99) {moveFromLadderOrLadder('B',6,99,'S');}
+
+        }// END OF SWTICH CASE FOR BOT
+    }// END OF WHILE LOOP
 }// END OF gameFunction
 
 void playerOne()
 {
-    setcolor(BLUE);
+    setcolor(WHITE);
     circle(110, 618, 7);
+    setfillstyle(SOLID_FILL,BLUE);
+    floodfill(110,618,15);
 
     // difference is of 56 between 1st and 2nd number
 }
 void bot()
 {
-    setcolor(YELLOW);
+    setcolor(WHITE);
     circle(110, 640, 7);
+    setfillstyle(SOLID_FILL,MAGENTA);
+    floodfill(110,640,15);
 }
 
 int throwDice()
 {
     srand(time(0));
     int dice = (int) (1+rand()%6);
-    getch();
     return dice;
+}
+
+
+void moveFromLadderOrLadder(char ch, int numberOnDice, int obsNumber, char obs)
+{
+    // FOR LADDER
+    if(obs == 'L')
+    {
+        if(ch == 'P' && obsNumber == 10) // for player with any dice num but at LADDER 10
+        {
+            if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
+            {
+                playerOnePosition = 35;
+                setcolor(15);
+                circle(400, 470, 7);
+                setfillstyle(SOLID_FILL,BLUE);
+                floodfill(400, 470, 15);
+            }
+        }
+        else if(ch == 'B' && obsNumber == 10) // for bot with any dice num but at LADDER 10
+        {
+            if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
+            {
+                botPosition = 35;
+                setcolor(15);
+                circle(400, 492, 7);
+                setfillstyle(SOLID_FILL,MAGENTA);
+                floodfill(400, 492, 15);
+            }
+        }
+        else if(ch == 'P' && obsNumber == 19) // for player with any dice num but at LADDER 19
+        {
+            if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
+            {
+                playerOnePosition = 74;
+                setcolor(15);
+                circle(460, 278, 7);
+                setfillstyle(SOLID_FILL,BLUE);
+                floodfill(460, 278, 15);
+            }
+        }
+        else if(ch == 'B' && obsNumber == 19) // for bot with any dice num but at LADDER 19
+        {
+            if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
+            {
+                botPosition = 74;
+                setcolor(15);
+                circle(460, 300, 7);
+                setfillstyle(SOLID_FILL,MAGENTA);
+                floodfill(460, 300, 15);
+            }
+        }
+        else if(ch == 'P' && obsNumber == 50) // for player with any dice num but at LADDER 50
+        {
+            if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
+            {
+                playerOnePosition = 88;
+                setcolor(15);
+                circle(515, 230, 7);
+                setfillstyle(SOLID_FILL,BLUE);
+                floodfill(515, 230, 15);
+            }
+        }
+        else if(ch == 'B' && obsNumber == 50) // for bot with any dice num but at LADDER 50
+        {
+            if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
+            {
+                botPosition = 88;
+                setcolor(15);
+                circle(515, 252, 7);
+                setfillstyle(SOLID_FILL,MAGENTA);
+                floodfill(515, 252,15);
+            }
+        }
+        else if(ch == 'P' && obsNumber == 78) // for player with any dice num but at LADDER 78
+        {
+            if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
+            {
+                playerOnePosition = 95;
+                setcolor(15);
+                circle(402, 183, 7);
+                setfillstyle(SOLID_FILL,BLUE);
+                floodfill(402, 183, 15);
+            }
+        }
+        else if(ch == 'B' && obsNumber == 78) // for bot with any dice num but at LADDER 78
+        {
+            if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
+            {
+                botPosition = 95;
+                setcolor(15);
+                circle(402, 205, 7);
+                setfillstyle(SOLID_FILL,MAGENTA);
+                floodfill(402, 205,15);
+            }
+        }
+    }
+    // FOR SNAKES
+    else if(obs == 'S')
+    {
+
+        if(ch == 'P' && obsNumber == 44) // for player with any dice num but at SNAKE 44
+        {
+            if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
+            {
+                playerOnePosition = 6;
+                setcolor(15);
+                circle(400, 618, 7);
+                setfillstyle(SOLID_FILL,BLUE);
+                floodfill(400, 618, 15);
+            }
+        }
+        else if(ch == 'B' && obsNumber == 44) // for bot with any dice num but at SNAKE 44
+        {
+            if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
+            {
+                botPosition = 6;
+                setcolor(15);
+                circle(400, 640, 7);
+                setfillstyle(SOLID_FILL,MAGENTA);
+                floodfill(400, 640,15);
+            }
+        }
+        else if(ch == 'P' && obsNumber == 64) // for player with any dice num but at SNAKE 64
+        {
+            if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
+            {
+                playerOnePosition = 40;
+                setcolor(15);
+                circle(110, 470, 7);
+                setfillstyle(SOLID_FILL,BLUE);
+                floodfill(110, 470,15);
+            }
+        }
+        else if(ch == 'B' && obsNumber == 64) // for bot with any dice num but at SNAKE 64
+        {
+            if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
+            {
+                botPosition = 40;
+                setcolor(15);
+                circle(110, 492, 7);
+                setfillstyle(SOLID_FILL,MAGENTA);
+                floodfill(110, 492,15);
+            }
+        }
+        else if(ch == 'P' && obsNumber == 90) // for player with any dice num but at SNAKE 90
+        {
+            if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
+            {
+                playerOnePosition = 53;
+                setcolor(15);
+                circle(515, 375, 7);
+                setfillstyle(SOLID_FILL,BLUE);
+                floodfill(515, 375, 15);
+            }
+        }
+        else if(ch == 'B' && obsNumber == 90) // for bot with any dice num but at SNAKE 90
+        {
+            if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
+            {
+                botPosition = 53;
+                setcolor(15);
+                circle(515, 397, 7);
+                setfillstyle(SOLID_FILL,MAGENTA);
+                floodfill(515, 397,15);
+            }
+        }
+        else if(ch == 'P' && obsNumber == 99) // for player with any dice num but at SNAKE 99
+        {
+            if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
+            {
+                playerOnePosition = 28;
+                setcolor(15);
+                circle(513, 520, 7);
+                setfillstyle(SOLID_FILL,BLUE);
+                floodfill(513, 520,15);
+            }
+        }
+        else if(ch == 'B' && obsNumber == 99) // for bot with any dice num but at SNAKE 99
+        {
+            if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
+            {
+                botPosition = 28;
+                setcolor(15);
+                circle(513, 542, 7);
+                setfillstyle(SOLID_FILL,MAGENTA);
+                floodfill(513, 542,15);
+            }
+        }
+    }
 }
