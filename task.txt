@@ -1,8 +1,16 @@
+Done : 
 Background
 dice
 player
+function for game
+
+To do : 
+back to startmenu after instructions
+throw dice button 
+curved snakes
+ppt
+instructions / end game
 update box
 update "Turn" status
-clickable 
-function for game
-instructions / end game
+clickable
+player moving : left - up - right, right - up - left
