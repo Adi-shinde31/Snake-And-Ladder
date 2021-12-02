@@ -18,15 +18,25 @@ using namespace std;
 #define FIVE 280
 #define SIX 336
 
+#define ONE_Y 49
+
+//#define ONE 60
+//#define TWO 120
+//#define THREE 180
+//#define FOUR 240
+//#define FIVE 300
+//#define SIX 360
+
 // Declare Functions here
 void startGame();
 void instructions();
 void endGame();
 void gameFunction();
-void playerOne();
-void bot();
+void playerOne(char, int, int);
+void bot(char, int, int);
 int throwDice();
 void moveFromLadderOrLadder(char, int, int, char);
+void moveToNextNumber(char, int, int);
 
 // Global Variable Declarations
 static int playerOnePosition = 1;
@@ -36,7 +46,6 @@ int main()
 {
 // Output Window set to full width
     initwindow(screenWidth+3, screenHeight+1, "",-6,-4);
-    int opt;
 
 // STYLED
 //    setcolor(10);
@@ -76,32 +85,67 @@ int main()
 
    bgiout << "START" << endl;
    outstreamxy(580,350);
+   setcolor(WHITE);
+   rectangle(570,340,630,375);
 //    outtextxy(655,350,"START");
 //
    setcolor(9);
 //    settextstyle(8,4,4);
    bgiout << "INSTRUCTIONS" << endl;
    outstreamxy(550,400);
+   setcolor(WHITE);
+   rectangle(540,390,660,425);
 //    outtextxy(725,450,"INSTRUCTIONS");
 //
    setcolor(9);
 //    settextstyle(8,4,4);
    bgiout << "END GAME" << endl;
    outstreamxy(565,450);
+   setcolor(WHITE);
+   rectangle(550,440,650,475);
 //    outtextxy(695,550,"QUIT GAME");
 
-    cout << "Enter 1: New Game." << endl;
-    cout << "Enter 2: Instructions" << endl;
-    cout << "Enter 3: Exit Game" << endl;
-    cin >> opt;
 
-    getch();
+    POINT CursorPosition;
+    int cursorY, cursorX;
+
+    int choice;
+    while(cursorX != 0 && cursorY != 0)
+    {
+        cursorX = CursorPosition.x;
+        cursorY = CursorPosition.y;
+        GetCursorPos(&CursorPosition);
+        if(GetAsyncKeyState(VK_LBUTTON))
+        {
+            if(cursorX > 570 && cursorY > 340 && cursorX < 630 && cursorY < 375)
+            {
+                choice = 1;
+                break;
+            }
+//            rectangle(540,390,660,425);
+            else if(cursorX > 540 && cursorY > 390 && cursorX < 660 && cursorY < 425)
+            {
+                choice = 2;
+                break;
+            }
+//            rectangle(550,440,650,475);
+            else if(cursorX > 550 && cursorY > 440 && cursorX < 650 && cursorY < 475)
+            {
+                choice = 3;
+                break;
+            }
+        }
+    }
+
     cleardevice();
 
-    switch (opt)
+    switch (choice)
     {
         case 1 :
             startGame();
+            playerOne('P', 120, 618);
+            bot('B', 120, 640);
+            gameFunction();
             getch();
             break;
 
@@ -127,10 +171,8 @@ void startGame()
     {
         if(reverseLine % 2 != 0) // odd
         {
-            setcolor(WHITE);
             for(int num = 1; num <= 10; num++)
             {
-                setcolor(WHITE);
                 bgiout<<"          "<< setw(2) << setfill('0') << i ;
                 i--;
             }
@@ -139,7 +181,6 @@ void startGame()
         {
             for(int num = -9; num <= 9; num++) // even
             {
-                setcolor(WHITE);
                 bgiout<< "          " << setw(2) << setfill('0') << i+num;
                 i--;
                 num++;
@@ -149,31 +190,33 @@ void startGame()
         reverseLine++;
     }
     outstreamxy(95, 200);
-
+// vertical outline and inline from left to right
+    setlinestyle(0,0,3);
     setcolor(WHITE);
-    line(90,160,90,652);
-    line(218,160,218,652);
-    line(162,160,162,652);
-    line(274,160,274,652);
-    line(332,160,332,652);
-    line(387,160,387,652);
-    line(443,160,443,652);
-    line(500,160,500,652);
-    line(555,160,555,652);
-    line(612,160,612,652);
-    line(670,160,670,652);
+    line(106,167,106,652);
+    line(162,167,162,652);
+    line(218,167,218,652);
+    line(274,167,274,652);
+    line(332,167,332,652);
+    line(387,167,387,652);
+    line(443,167,443,652);
+    line(500,167,500,652);
+    line(555,167,555,652);
+    line(612,167,612,652);
+    line(668,167,668,652);
+// horizontal outline and inline from down to up
     setcolor(WHITE);
-    line(90,652,670,652);
-    line(90,600,670,600);
-    line(90,552,670,552);
-    line(90,504,670,504);
-    line(90,456,670,456);
-    line(90,408,670,408);
-    line(90,360,670,360);
-    line(90,312,670,312);
-    line(90,264,670,264);
-    line(90,216,670,216);
-    line(90,160,670,160);
+    line(106,652,668,652);
+    line(106,600,668,600);
+    line(106,552,668,552);
+    line(106,504,668,504);
+    line(106,456,668,456);
+    line(106,408,668,408);
+    line(106,360,668,360);
+    line(106,312,668,312);
+    line(106,264,668,264);
+    line(106,216,668,216);
+    line(106,167,668,167);
 
     // Created ladders here
     setcolor(GREEN);
@@ -193,17 +236,10 @@ void startGame()
 
 
     // Created Demo Players
-    playerOne();
-    bot();
+//    playerOne();
+//    bot();
 
-    setcolor(WHITE);
-    setbkcolor(WHITE);
-    rectangle(90,160,670,652);
-    setbkcolor(WHITE);
-
-    gameFunction();
-
-}
+}// END OF startGame()
 
 
 void instructions()
@@ -213,7 +249,7 @@ void instructions()
     bgiout << "Thank you!!" << endl;
     outstreamxy(120, 200);
     getch();
-}
+}// END OF instructions()
 
 void endGame()
 {
@@ -221,7 +257,7 @@ void endGame()
     bgiout << "Press any key to exit." << endl;
     outstreamxy(120, 200);
     getch();
-}
+}// END OF endGame()
 
 void gameFunction()
 {
@@ -232,6 +268,7 @@ void gameFunction()
 //        cout << "throw dice = " << playerOnePosition << endl;
 //        getch();
 //    }
+
 
     cout << "player position at start : " << playerOnePosition << endl;
     cout << "Bot position at start : " << botPosition << endl;
@@ -258,6 +295,7 @@ void gameFunction()
         else
         {
             playerOnePosition += randomNumberForPlayerOne;
+            moveToNextNumber('P', randomNumberForPlayerOne, playerOnePosition);
             cout << "Player position after adding with above Random Number : " << playerOnePosition << endl;
         }
 
@@ -268,66 +306,60 @@ void gameFunction()
         {
             case 1 :
                 if(playerOnePosition == 10) {moveFromLadderOrLadder('P',1,10,'L');}
-                else if(playerOnePosition == 19){moveFromLadderOrLadder('P',1,19,'L');}
-                else if(playerOnePosition == 50){moveFromLadderOrLadder('P',1,50,'L');}
-                else if(playerOnePosition == 78){moveFromLadderOrLadder('P',1,78,'L');}
-// SNAKE
-                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',1,44,'S');}
+                else if(playerOnePosition == 19) {moveFromLadderOrLadder('P',1,19,'L');}
+                else if(playerOnePosition == 50) {moveFromLadderOrLadder('P',1,50,'L');}
+                else if(playerOnePosition == 78) {moveFromLadderOrLadder('P',1,78,'L');}
+                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',1,44,'S');} // SNAKE
                 else if(playerOnePosition == 64) {moveFromLadderOrLadder('P',1,64,'S');}
                 else if(playerOnePosition == 90) {moveFromLadderOrLadder('P',1,90,'S');}
                 else if(playerOnePosition == 99) {moveFromLadderOrLadder('P',1,99,'S');}
 
             case 2 :
                 if(playerOnePosition == 10) {moveFromLadderOrLadder('P',2,10,'L');}
-                else if(playerOnePosition == 19){moveFromLadderOrLadder('P',2,19,'L');}
-                else if(playerOnePosition == 50){moveFromLadderOrLadder('P',2,50,'L');}
-                else if(playerOnePosition == 78){moveFromLadderOrLadder('P',2,78,'L');}
-// SNAKE
-                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',2,44,'S');}
+                else if(playerOnePosition == 19) {moveFromLadderOrLadder('P',2,19,'L');}
+                else if(playerOnePosition == 50) {moveFromLadderOrLadder('P',2,50,'L');}
+                else if(playerOnePosition == 78) {moveFromLadderOrLadder('P',2,78,'L');}
+                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',2,44,'S');} // SNAKE
                 else if(playerOnePosition == 64) {moveFromLadderOrLadder('P',2,64,'S');}
                 else if(playerOnePosition == 90) {moveFromLadderOrLadder('P',2,90,'S');}
                 else if(playerOnePosition == 99) {moveFromLadderOrLadder('P',2,99,'S');}
 
             case 3 :
                 if(playerOnePosition == 10) {moveFromLadderOrLadder('P',3,10,'L');}
-                else if(playerOnePosition == 19){moveFromLadderOrLadder('P',3,19,'L');}
-                else if(playerOnePosition == 50){moveFromLadderOrLadder('P',3,50,'L');}
-                else if(playerOnePosition == 78){moveFromLadderOrLadder('P',3,78,'L');}
-// SNAKE
-                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',3,44,'S');}
+                else if(playerOnePosition == 19) {moveFromLadderOrLadder('P',3,19,'L');}
+                else if(playerOnePosition == 50) {moveFromLadderOrLadder('P',3,50,'L');}
+                else if(playerOnePosition == 78) {moveFromLadderOrLadder('P',3,78,'L');}
+                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',3,44,'S');} // SNAKE
                 else if(playerOnePosition == 64) {moveFromLadderOrLadder('P',3,64,'S');}
                 else if(playerOnePosition == 90) {moveFromLadderOrLadder('P',3,90,'S');}
                 else if(playerOnePosition == 99) {moveFromLadderOrLadder('P',3,99,'S');}
 
             case 4 :
                 if(playerOnePosition == 10) {moveFromLadderOrLadder('P',4,10,'L');}
-                else if(playerOnePosition == 19){moveFromLadderOrLadder('P',4,19,'L');}
-                else if(playerOnePosition == 50){moveFromLadderOrLadder('P',4,50,'L');}
-                else if(playerOnePosition == 78){moveFromLadderOrLadder('P',4,78,'L');}
-// SNAKE
-                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',4,44,'S');}
+                else if(playerOnePosition == 19) {moveFromLadderOrLadder('P',4,19,'L');}
+                else if(playerOnePosition == 50) {moveFromLadderOrLadder('P',4,50,'L');}
+                else if(playerOnePosition == 78) {moveFromLadderOrLadder('P',4,78,'L');}
+                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',4,44,'S');} // SNAKE
                 else if(playerOnePosition == 64) {moveFromLadderOrLadder('P',4,64,'S');}
                 else if(playerOnePosition == 90) {moveFromLadderOrLadder('P',4,90,'S');}
                 else if(playerOnePosition == 99) {moveFromLadderOrLadder('P',4,99,'S');}
 
             case 5 :
                 if(playerOnePosition == 10) {moveFromLadderOrLadder('P',5,10,'L');}
-                else if(playerOnePosition == 19){moveFromLadderOrLadder('P',5,19,'L');}
-                else if(playerOnePosition == 50){moveFromLadderOrLadder('P',5,50,'L');}
-                else if(playerOnePosition == 78){moveFromLadderOrLadder('P',5,78,'L');}
-// SNAKE
-                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',5,44,'S');}
+                else if(playerOnePosition == 19) {moveFromLadderOrLadder('P',5,19,'L');}
+                else if(playerOnePosition == 50) {moveFromLadderOrLadder('P',5,50,'L');}
+                else if(playerOnePosition == 78) {moveFromLadderOrLadder('P',5,78,'L');}
+                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',5,44,'S');} // SNAKE
                 else if(playerOnePosition == 64) {moveFromLadderOrLadder('P',5,64,'S');}
                 else if(playerOnePosition == 90) {moveFromLadderOrLadder('P',5,90,'S');}
                 else if(playerOnePosition == 99) {moveFromLadderOrLadder('P',5,99,'S');}
 
             case 6 :
                 if(playerOnePosition == 10) {moveFromLadderOrLadder('P',6,10,'L');}
-                else if(playerOnePosition == 19){moveFromLadderOrLadder('P',6,19,'L');}
-                else if(playerOnePosition == 50){moveFromLadderOrLadder('P',6,50,'L');}
-                else if(playerOnePosition == 78){moveFromLadderOrLadder('P',6,78,'L');}
-// SNAKE
-                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',6,44,'S');}
+                else if(playerOnePosition == 19) {moveFromLadderOrLadder('P',6,19,'L');}
+                else if(playerOnePosition == 50) {moveFromLadderOrLadder('P',6,50,'L');}
+                else if(playerOnePosition == 78) {moveFromLadderOrLadder('P',6,78,'L');}
+                else if(playerOnePosition == 44) {moveFromLadderOrLadder('P',6,44,'S');} // SNAKE
                 else if(playerOnePosition == 64) {moveFromLadderOrLadder('P',6,64,'S');}
                 else if(playerOnePosition == 90) {moveFromLadderOrLadder('P',6,90,'S');}
                 else if(playerOnePosition == 99) {moveFromLadderOrLadder('P',6,99,'S');}
@@ -348,6 +380,7 @@ void gameFunction()
         else
         {
             botPosition += randomNumberForBot;
+            moveToNextNumber('B',randomNumberForBot, botPosition);
             cout << "Bot position after adding with above Random Number : " << botPosition << endl;
         }
 
@@ -358,9 +391,9 @@ void gameFunction()
         {
             case 1 :
                 if(botPosition == 10) {moveFromLadderOrLadder('B',1,10,'L');}
-                else if(botPosition == 19){moveFromLadderOrLadder('B',1,19,'L');}
-                else if(botPosition == 50){moveFromLadderOrLadder('B',1,50,'L');}
-                else if(botPosition == 78){moveFromLadderOrLadder('B',1,78,'L');}
+                else if(botPosition == 19) {moveFromLadderOrLadder('B',1,19,'L');}
+                else if(botPosition == 50) {moveFromLadderOrLadder('B',1,50,'L');}
+                else if(botPosition == 78) {moveFromLadderOrLadder('B',1,78,'L');}
                 else if(botPosition == 44) {moveFromLadderOrLadder('B',1,44,'S');} // SNAKE
                 else if(botPosition == 64) {moveFromLadderOrLadder('B',1,64,'S');}
                 else if(botPosition == 90) {moveFromLadderOrLadder('B',1,90,'S');}
@@ -368,9 +401,9 @@ void gameFunction()
 
             case 2 :
                 if(botPosition == 10) {moveFromLadderOrLadder('B',2,10,'L');}
-                else if(botPosition == 19){moveFromLadderOrLadder('B',2,19,'L');}
-                else if(botPosition == 50){moveFromLadderOrLadder('B',2,50,'L');}
-                else if(botPosition == 78){moveFromLadderOrLadder('B',2,78,'L');}
+                else if(botPosition == 19) {moveFromLadderOrLadder('B',2,19,'L');}
+                else if(botPosition == 50) {moveFromLadderOrLadder('B',2,50,'L');}
+                else if(botPosition == 78) {moveFromLadderOrLadder('B',2,78,'L');}
                 else if(botPosition == 44) {moveFromLadderOrLadder('B',2,44,'S');} // SNAKE
                 else if(botPosition == 64) {moveFromLadderOrLadder('B',2,64,'S');}
                 else if(botPosition == 90) {moveFromLadderOrLadder('B',2,90,'S');}
@@ -378,9 +411,9 @@ void gameFunction()
 
             case 3 :
                 if(botPosition == 10) {moveFromLadderOrLadder('B',3,10,'L');}
-                else if(botPosition == 19){moveFromLadderOrLadder('B',3,19,'L');}
-                else if(botPosition == 50){moveFromLadderOrLadder('B',3,50,'L');}
-                else if(botPosition == 78){moveFromLadderOrLadder('B',3,78,'L');}
+                else if(botPosition == 19) {moveFromLadderOrLadder('B',3,19,'L');}
+                else if(botPosition == 50) {moveFromLadderOrLadder('B',3,50,'L');}
+                else if(botPosition == 78) {moveFromLadderOrLadder('B',3,78,'L');}
                 else if(botPosition == 44) {moveFromLadderOrLadder('B',3,44,'S');} // SNAKE
                 else if(botPosition == 64) {moveFromLadderOrLadder('B',3,64,'S');}
                 else if(botPosition == 90) {moveFromLadderOrLadder('B',3,90,'S');}
@@ -388,9 +421,9 @@ void gameFunction()
 
             case 4 :
                 if(botPosition == 10) {moveFromLadderOrLadder('B',4,10,'L');}
-                else if(botPosition == 19){moveFromLadderOrLadder('B',4,19,'L');}
-                else if(botPosition == 50){moveFromLadderOrLadder('B',4,50,'L');}
-                else if(botPosition == 78){moveFromLadderOrLadder('B',4,78,'L');}
+                else if(botPosition == 19) {moveFromLadderOrLadder('B',4,19,'L');}
+                else if(botPosition == 50) {moveFromLadderOrLadder('B',4,50,'L');}
+                else if(botPosition == 78) {moveFromLadderOrLadder('B',4,78,'L');}
                 else if(botPosition == 44) {moveFromLadderOrLadder('B',4,44,'S');} // SNAKE
                 else if(botPosition == 64) {moveFromLadderOrLadder('B',4,64,'S');}
                 else if(botPosition == 90) {moveFromLadderOrLadder('B',4,90,'S');}
@@ -398,9 +431,9 @@ void gameFunction()
 
             case 5 :
                 if(botPosition == 10) {moveFromLadderOrLadder('B',5,10,'L');}
-                else if(botPosition == 19){moveFromLadderOrLadder('B',5,19,'L');}
-                else if(botPosition == 50){moveFromLadderOrLadder('B',5,50,'L');}
-                else if(botPosition == 78){moveFromLadderOrLadder('B',5,78,'L');}
+                else if(botPosition == 19) {moveFromLadderOrLadder('B',5,19,'L');}
+                else if(botPosition == 50) {moveFromLadderOrLadder('B',5,50,'L');}
+                else if(botPosition == 78) {moveFromLadderOrLadder('B',5,78,'L');}
                 else if(botPosition == 44) {moveFromLadderOrLadder('B',5,44,'S');} // SNAKE
                 else if(botPosition == 64) {moveFromLadderOrLadder('B',5,64,'S');}
                 else if(botPosition == 90) {moveFromLadderOrLadder('B',5,90,'S');}
@@ -408,9 +441,9 @@ void gameFunction()
 
             case 6 :
                 if(botPosition == 10) {moveFromLadderOrLadder('B',6,10,'L');}
-                else if(botPosition == 19){moveFromLadderOrLadder('B',6,19,'L');}
-                else if(botPosition == 50){moveFromLadderOrLadder('B',6,50,'L');}
-                else if(botPosition == 78){moveFromLadderOrLadder('B',6,78,'L');}
+                else if(botPosition == 19) {moveFromLadderOrLadder('B',6,19,'L');}
+                else if(botPosition == 50) {moveFromLadderOrLadder('B',6,50,'L');}
+                else if(botPosition == 78) {moveFromLadderOrLadder('B',6,78,'L');}
                 else if(botPosition == 44) {moveFromLadderOrLadder('B',6,44,'S');} // SNAKE
                 else if(botPosition == 64) {moveFromLadderOrLadder('B',6,64,'S');}
                 else if(botPosition == 90) {moveFromLadderOrLadder('B',6,90,'S');}
@@ -420,29 +453,30 @@ void gameFunction()
     }// END OF WHILE LOOP
 }// END OF gameFunction
 
-void playerOne()
+void playerOne(char ch, int X_cord = 120, int Y_cord = 618)
 {
     setcolor(WHITE);
-    circle(110, 618, 7);
+    circle(X_cord, Y_cord, 7);
     setfillstyle(SOLID_FILL,BLUE);
-    floodfill(110,618,15);
+    floodfill(X_cord, Y_cord, 15);
 
     // difference is of 56 between 1st and 2nd number
-}
-void bot()
+}// END OF playerOne()
+
+void bot(char ch, int X_cord = 120, int Y_cord = 640)
 {
     setcolor(WHITE);
-    circle(110, 640, 7);
-    setfillstyle(SOLID_FILL,MAGENTA);
-    floodfill(110,640,15);
-}
+    circle(X_cord, Y_cord, 7);
+    setfillstyle(SOLID_FILL, MAGENTA);
+    floodfill(X_cord, Y_cord, 15);
+}// END OF bot()
 
 int throwDice()
 {
     srand(time(0));
     int dice = (int) (1+rand()%6);
     return dice;
-}
+}// END OF throwDice()
 
 
 void moveFromLadderOrLadder(char ch, int numberOnDice, int obsNumber, char obs)
@@ -513,7 +547,7 @@ void moveFromLadderOrLadder(char ch, int numberOnDice, int obsNumber, char obs)
                 setcolor(15);
                 circle(515, 252, 7);
                 setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(515, 252,15);
+                floodfill(515, 252, 15);
             }
         }
         else if(ch == 'P' && obsNumber == 78) // for player with any dice num but at LADDER 78
@@ -535,7 +569,7 @@ void moveFromLadderOrLadder(char ch, int numberOnDice, int obsNumber, char obs)
                 setcolor(15);
                 circle(402, 205, 7);
                 setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(402, 205,15);
+                floodfill(402, 205, 15);
             }
         }
     }
@@ -562,7 +596,7 @@ void moveFromLadderOrLadder(char ch, int numberOnDice, int obsNumber, char obs)
                 setcolor(15);
                 circle(400, 640, 7);
                 setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(400, 640,15);
+                floodfill(400, 640, 15);
             }
         }
         else if(ch == 'P' && obsNumber == 64) // for player with any dice num but at SNAKE 64
@@ -573,7 +607,7 @@ void moveFromLadderOrLadder(char ch, int numberOnDice, int obsNumber, char obs)
                 setcolor(15);
                 circle(110, 470, 7);
                 setfillstyle(SOLID_FILL,BLUE);
-                floodfill(110, 470,15);
+                floodfill(110, 470, 15);
             }
         }
         else if(ch == 'B' && obsNumber == 64) // for bot with any dice num but at SNAKE 64
@@ -584,7 +618,7 @@ void moveFromLadderOrLadder(char ch, int numberOnDice, int obsNumber, char obs)
                 setcolor(15);
                 circle(110, 492, 7);
                 setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(110, 492,15);
+                floodfill(110, 492, 15);
             }
         }
         else if(ch == 'P' && obsNumber == 90) // for player with any dice num but at SNAKE 90
@@ -606,7 +640,7 @@ void moveFromLadderOrLadder(char ch, int numberOnDice, int obsNumber, char obs)
                 setcolor(15);
                 circle(515, 397, 7);
                 setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(515, 397,15);
+                floodfill(515, 397, 15);
             }
         }
         else if(ch == 'P' && obsNumber == 99) // for player with any dice num but at SNAKE 99
@@ -629,6 +663,175 @@ void moveFromLadderOrLadder(char ch, int numberOnDice, int obsNumber, char obs)
                 circle(513, 542, 7);
                 setfillstyle(SOLID_FILL,MAGENTA);
                 floodfill(513, 542,15);
+            }
+        }
+    }
+}// END OF moveFromLadderOrLadder()
+
+void moveToNextNumber(char dine, int numberAtDice, int position) // 3 4
+{
+//player
+    if(dine == 'P')
+    {
+        if(numberAtDice == 1)
+        {
+            for(int i = 1; i <= ONE; i++)
+            {
+                cleardevice();
+                startGame();
+                setcolor(WHITE);
+                circle(120+i, 618, 7);
+                setfillstyle(SOLID_FILL,BLUE);
+                floodfill(120+i,618,15);
+                delay(10);
+            }
+        }
+        else if(numberAtDice == 2)
+        {
+            for(int i = 1; i <= TWO; i++)
+            {
+                cleardevice();
+                startGame();
+                setcolor(WHITE);
+                circle(120+i, 618, 7);
+                setfillstyle(SOLID_FILL,BLUE);
+                floodfill(120+i,618,15);
+                delay(10);
+            }
+        }
+        else if(numberAtDice == 3)
+        {
+            for(int i = 1; i <= THREE; i++)
+            {
+                cleardevice();
+                startGame();
+                setcolor(WHITE);
+                circle(120+i, 618, 7);
+                setfillstyle(SOLID_FILL,BLUE);
+                floodfill(120+i,618,15);
+                delay(10);
+            }
+        }
+        else if(numberAtDice == 4)
+        {
+            for(int i = 1; i <= FOUR; i++)
+            {
+                cleardevice();
+                startGame();
+                setcolor(WHITE);
+                circle(120+i, 618, 7);
+                setfillstyle(SOLID_FILL,BLUE);
+                floodfill(120+i,618,15);
+                delay(10);
+            }
+        }
+        else if(numberAtDice == 5)
+        {
+            for(int i = 1; i <= FIVE; i++)
+            {
+                cleardevice();
+                startGame();
+                setcolor(WHITE);
+                circle(120+i, 618, 7);
+                setfillstyle(SOLID_FILL,BLUE);
+                floodfill(120+i,618,15);
+                delay(10);
+            }
+        }
+        else if(numberAtDice == 6)
+        {
+            for(int i = 1; i <= SIX; i++)
+            {
+                cleardevice();
+                startGame();
+                setcolor(WHITE);
+                circle(120+i, 618, 7);
+                setfillstyle(SOLID_FILL,BLUE);
+                floodfill(120+i,618,15);
+                delay(10);
+            }
+        }
+
+            // PLAYER ONE WILL DISAPPER BCOZ OF CLEAR DEICE IN BOT FUNC, NEW POS OF PLAYER ONE WILL GET CLEAR
+    }
+    else if (dine == 'B')
+    {
+        if(numberAtDice == 1)
+        {
+            for(int i = 1; i <= ONE; i++)
+            {
+                cleardevice();
+                startGame();
+                setcolor(WHITE);
+                circle(120+i, 640, 7);
+                setfillstyle(SOLID_FILL,BLUE);
+                floodfill(120+i,640,15);
+                delay(10);
+            }
+        }
+        else if(numberAtDice == 2)
+        {
+            for(int i = 1; i <= TWO; i++)
+            {
+                cleardevice();
+                startGame();
+                setcolor(WHITE);
+                circle(120+i, 640, 7);
+                setfillstyle(SOLID_FILL,MAGENTA);
+                floodfill(120+i,640,15);
+                delay(10);
+            }
+        }
+        else if(numberAtDice == 3)
+        {
+            for(int i = 1; i <= THREE; i++)
+            {
+                cleardevice();
+                startGame();
+                setcolor(WHITE);
+                circle(120+i, 640, 7);
+                setfillstyle(SOLID_FILL,MAGENTA);
+                floodfill(120+i,640,15);
+                delay(10);
+            }
+        }
+        else if(numberAtDice == 4)
+        {
+            for(int i = 1; i <= FOUR; i++)
+            {
+                cleardevice();
+                startGame();
+                setcolor(WHITE);
+                circle(120+i, 640, 7);
+                setfillstyle(SOLID_FILL,MAGENTA);
+                floodfill(120+i,640,15);
+                delay(10);
+            }
+        }
+        else if(numberAtDice == 5)
+        {
+            for(int i = 1; i <= FIVE; i++)
+            {
+                cleardevice();
+                startGame();
+                setcolor(WHITE);
+                circle(120+i, 640, 7);
+                setfillstyle(SOLID_FILL,MAGENTA);
+                floodfill(120+i,640,15);
+                delay(10);
+            }
+        }
+        else if(numberAtDice == 6)
+        {
+            for(int i = 1; i <= SIX; i++)
+            {
+                cleardevice();
+                startGame();
+                setcolor(WHITE);
+                circle(120+i, 640, 7);
+                setfillstyle(SOLID_FILL,MAGENTA);
+                floodfill(120+i,640,15);
+                delay(10);
             }
         }
     }
