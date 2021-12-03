@@ -12,20 +12,8 @@ using namespace std;
 #define screenWidth GetSystemMetrics(SM_CXSCREEN)
 #define screenHeight GetSystemMetrics(SM_CYSCREEN)
 #define ONE 56
-#define TWO 112
-#define THREE 168
-#define FOUR 224
-#define FIVE 280
-#define SIX 336
 
 #define ONE_Y 49
-
-//#define ONE 60
-//#define TWO 120
-//#define THREE 180
-//#define FOUR 240
-//#define FIVE 300
-//#define SIX 360
 
 // Declare Functions here
 void startGame();
@@ -35,12 +23,15 @@ void gameFunction();
 void playerOne(char, int, int);
 void bot(char, int, int);
 int throwDice();
-void moveFromLadderOrLadder(char, int, int, char);
 void moveToNextNumber(char, int, int);
 
 // Global Variable Declarations
 static int playerOnePosition = 1;
 static int botPosition = 1;
+static int playerOne_XCord = 120;
+static int playerOne_YCord = 618;
+static int bot_XCord = 120;
+static int bot_YCord = 640;
 
 int main()
 {
@@ -143,8 +134,8 @@ int main()
     {
         case 1 :
             startGame();
-            playerOne('P', 120, 618);
-            bot('B', 120, 640);
+            playerOne('P', playerOne_XCord, playerOne_YCord);
+            bot('B', bot_XCord, bot_YCord);
             gameFunction();
             getch();
             break;
@@ -181,7 +172,7 @@ void startGame()
         {
             for(int num = -9; num <= 9; num++) // even
             {
-                bgiout<< "          " << setw(2) << setfill('0') << i+num;
+                bgiout<<"          "<< setw(2) << setfill('0') << i+num;
                 i--;
                 num++;
             }
@@ -205,7 +196,7 @@ void startGame()
     line(612,167,612,652);
     line(668,167,668,652);
 // horizontal outline and inline from down to up
-    setcolor(WHITE);
+
     line(106,652,668,652);
     line(106,600,668,600);
     line(106,552,668,552);
@@ -228,7 +219,7 @@ void startGame()
 
     // Created Snakes here
     setcolor(RED);
-    setlinestyle(0,0,3);
+
     line(186,200,533,531);//32
     line(295,340,128,480);//64
     line(408,623,292,436);//06
@@ -270,37 +261,34 @@ void gameFunction()
 //    }
 
 
-    cout << "player position at start : " << playerOnePosition << endl;
-    cout << "Bot position at start : " << botPosition << endl;
+    cout << "\n* Player position at start : " << playerOnePosition << endl;
+    cout << "* Bot position at start : " << botPosition << endl;
     getch();
 
     while (playerOnePosition != 100 || botPosition != 100)
     {
         // WHEN USER CLICK ON THROW DICE FOR 1st TIME
         int randomNumberForPlayerOne = throwDice();
-        cout << "Random Number for PlayerOne : " << randomNumberForPlayerOne << endl;
+        cout << "\n-> Random Number for PlayerOne : " << randomNumberForPlayerOne << endl;
         getch();
         int randomNumberForBot = throwDice();
-        cout << "Random Number for Bot : " << randomNumberForBot << endl << endl;
+        cout << "-> Random Number for Bot : " << randomNumberForBot << endl << endl;
         getch();
 
 
-        if(randomNumberForPlayerOne + playerOnePosition > 100){}
-        else if(randomNumberForPlayerOne + playerOnePosition == 100)
+        if(randomNumberForPlayerOne + playerOnePosition > 100){} // FOR number greater than 100(will never be true)
+        else if(randomNumberForPlayerOne + playerOnePosition == 100) // WHEN dice is thrown and requireed num to win comes
         {
             cout << "player won" << endl;
             getch();
             break;
         }
-        else
+        else  // num is less than 100
         {
-            playerOnePosition += randomNumberForPlayerOne;
             moveToNextNumber('P', randomNumberForPlayerOne, playerOnePosition);
+            playerOnePosition += randomNumberForPlayerOne;
             cout << "Player position after adding with above Random Number : " << playerOnePosition << endl;
         }
-
-//        randomNumberForPlayerOne = 1;
-//        playerOnePosition = 99;
 
         switch(randomNumberForPlayerOne)
         {
@@ -380,12 +368,9 @@ void gameFunction()
         else
         {
             botPosition += randomNumberForBot;
-            moveToNextNumber('B',randomNumberForBot, botPosition);
+//            moveToNextNumber('B',randomNumberForBot, botPosition);
             cout << "Bot position after adding with above Random Number : " << botPosition << endl;
         }
-
-//    randomNumberForBot = 1;
-//    botPosition = 99;
 
         switch(randomNumberForBot)
         {
@@ -453,7 +438,7 @@ void gameFunction()
     }// END OF WHILE LOOP
 }// END OF gameFunction
 
-void playerOne(char ch, int X_cord = 120, int Y_cord = 618)
+void playerOne(char ch, int X_cord, int Y_cord)
 {
     setcolor(WHITE);
     circle(X_cord, Y_cord, 7);
@@ -463,7 +448,7 @@ void playerOne(char ch, int X_cord = 120, int Y_cord = 618)
     // difference is of 56 between 1st and 2nd number
 }// END OF playerOne()
 
-void bot(char ch, int X_cord = 120, int Y_cord = 640)
+void bot(char ch, int X_cord, int Y_cord)
 {
     setcolor(WHITE);
     circle(X_cord, Y_cord, 7);
@@ -477,7 +462,6 @@ int throwDice()
     int dice = (int) (1+rand()%6);
     return dice;
 }// END OF throwDice()
-
 
 void moveFromLadderOrLadder(char ch, int numberOnDice, int obsNumber, char obs)
 {
@@ -668,171 +652,89 @@ void moveFromLadderOrLadder(char ch, int numberOnDice, int obsNumber, char obs)
     }
 }// END OF moveFromLadderOrLadder()
 
-void moveToNextNumber(char dine, int numberAtDice, int position) // 3 4
+void moveToNextNumber(char dine, int numberAtDice, int position)
 {
 //player
     if(dine == 'P')
     {
-        if(numberAtDice == 1)
-        {
-            for(int i = 1; i <= ONE; i++)
+        int reach = numberAtDice+position;
+        cout << "ADDITION OF "<<numberAtDice <<" & " << position << "= " << numberAtDice+position << endl;
+        getch();
+            while(position != reach)
             {
-                cleardevice();
-                startGame();
-                setcolor(WHITE);
-                circle(120+i, 618, 7);
-                setfillstyle(SOLID_FILL,BLUE);
-                floodfill(120+i,618,15);
-                delay(10);
-            }
-        }
-        else if(numberAtDice == 2)
-        {
-            for(int i = 1; i <= TWO; i++)
-            {
-                cleardevice();
-                startGame();
-                setcolor(WHITE);
-                circle(120+i, 618, 7);
-                setfillstyle(SOLID_FILL,BLUE);
-                floodfill(120+i,618,15);
-                delay(10);
-            }
-        }
-        else if(numberAtDice == 3)
-        {
-            for(int i = 1; i <= THREE; i++)
-            {
-                cleardevice();
-                startGame();
-                setcolor(WHITE);
-                circle(120+i, 618, 7);
-                setfillstyle(SOLID_FILL,BLUE);
-                floodfill(120+i,618,15);
-                delay(10);
-            }
-        }
-        else if(numberAtDice == 4)
-        {
-            for(int i = 1; i <= FOUR; i++)
-            {
-                cleardevice();
-                startGame();
-                setcolor(WHITE);
-                circle(120+i, 618, 7);
-                setfillstyle(SOLID_FILL,BLUE);
-                floodfill(120+i,618,15);
-                delay(10);
-            }
-        }
-        else if(numberAtDice == 5)
-        {
-            for(int i = 1; i <= FIVE; i++)
-            {
-                cleardevice();
-                startGame();
-                setcolor(WHITE);
-                circle(120+i, 618, 7);
-                setfillstyle(SOLID_FILL,BLUE);
-                floodfill(120+i,618,15);
-                delay(10);
-            }
-        }
-        else if(numberAtDice == 6)
-        {
-            for(int i = 1; i <= SIX; i++)
-            {
-                cleardevice();
-                startGame();
-                setcolor(WHITE);
-                circle(120+i, 618, 7);
-                setfillstyle(SOLID_FILL,BLUE);
-                floodfill(120+i,618,15);
-                delay(10);
-            }
-        }
-
-            // PLAYER ONE WILL DISAPPER BCOZ OF CLEAR DEICE IN BOT FUNC, NEW POS OF PLAYER ONE WILL GET CLEAR
+                if((playerOne_XCord < 623 && (playerOne_YCord == 618 || playerOne_YCord == 520 || playerOne_YCord == 422 || playerOne_YCord == 324|| playerOne_YCord == 226 || playerOne_YCord == 128)))// FOR X COORDINATE
+                {
+                    cout << "\n\nSTARTING \n\nX IS : " << playerOne_XCord << endl << "Y IS : " << playerOne_YCord << endl <<endl;
+                    for(int i = 1; i <= ONE; i++)
+                    {
+                        cleardevice();
+                        startGame();
+                        setcolor(WHITE);
+                        playerOne_XCord += 1;
+                        circle(playerOne_XCord, playerOne_YCord, 7);
+                        setfillstyle(SOLID_FILL,BLUE);
+                        floodfill(playerOne_XCord,playerOne_YCord,15);
+                        delay(2);
+                        cout << "1st LOOP : " << i << "  :  " << playerOne_XCord << endl;
+                    }
+                    cout << "\n\nX IS : " << playerOne_XCord << endl << "Y IS : " << playerOne_YCord << endl <<endl;
+                    position++;
+                }
+                else if(playerOne_XCord == 624 && (playerOne_YCord == 618 || playerOne_YCord == 520 ||  playerOne_YCord == 422 || playerOne_YCord == 324|| playerOne_YCord == 226 || playerOne_YCord == 128)) // FOR MAX Y COORDINATE
+                {
+                    for(int i = 1; i <= ONE_Y; i++)
+                    {
+                        cleardevice();
+                        startGame();
+                        setcolor(WHITE);
+                        playerOne_YCord -= 1;
+                        circle(playerOne_XCord, playerOne_YCord, 7);
+                        setfillstyle(SOLID_FILL,BLUE);
+                        floodfill(playerOne_XCord,playerOne_YCord,15);
+                        delay(2);
+                        cout << "2nd LOOP : " << i << "  :  " << playerOne_YCord << endl;
+                    }
+                    cout << "\n\nX IS : " << playerOne_XCord << endl << "Y IS : " << playerOne_YCord << endl <<endl;
+                    position++;
+                }
+                else if((playerOne_XCord > 120 && (playerOne_YCord == 569 || playerOne_YCord == 471 || playerOne_YCord == 373 || playerOne_YCord == 275 || playerOne_YCord == 177 || playerOne_YCord == 79))) // NEGATIVE X COORDINATE
+                {
+                    for(int i = 1; i <= ONE; i++)
+                    {
+                        cleardevice();
+                        startGame();
+                        setcolor(WHITE);
+                        playerOne_XCord -= 1;
+                        circle(playerOne_XCord, playerOne_YCord, 7);
+                        setfillstyle(SOLID_FILL,BLUE);
+                        floodfill(playerOne_XCord,playerOne_YCord,15);
+                        delay(2);
+                        cout << "3rd LOOP : " << i << "  :  " << playerOne_XCord << endl;
+                    }
+                    cout << "\n\nX IS : " << playerOne_XCord << endl << "Y IS : " << playerOne_YCord << endl <<endl;
+                    position++;
+                }
+                else if((playerOne_XCord == 120 && (playerOne_YCord == 569 || playerOne_YCord ==  471 || playerOne_YCord == 373 || playerOne_YCord == 275 || playerOne_YCord == 177 || playerOne_YCord == 79))) // FOR MIN Y COORDINATE
+                {
+                    for(int i = 1; i <= ONE_Y; i++)
+                    {
+                        cleardevice();
+                        startGame();
+                        setcolor(WHITE);
+                        playerOne_YCord -= 1;
+                        circle(playerOne_XCord, playerOne_YCord, 7);
+                        setfillstyle(SOLID_FILL,BLUE);
+                        floodfill(playerOne_XCord,playerOne_YCord,15);
+                        delay(2);
+                        cout << "4rd LOOP : " << i << "  :  " << playerOne_YCord << endl;
+                    }
+                    cout << "\n\nX IS : " << playerOne_XCord << endl << "Y IS : " << playerOne_YCord << endl <<endl;
+                    position++;
+                }
+            }// END OF while loop
     }
-    else if (dine == 'B')
+    else if(dine == "B")
     {
-        if(numberAtDice == 1)
-        {
-            for(int i = 1; i <= ONE; i++)
-            {
-                cleardevice();
-                startGame();
-                setcolor(WHITE);
-                circle(120+i, 640, 7);
-                setfillstyle(SOLID_FILL,BLUE);
-                floodfill(120+i,640,15);
-                delay(10);
-            }
-        }
-        else if(numberAtDice == 2)
-        {
-            for(int i = 1; i <= TWO; i++)
-            {
-                cleardevice();
-                startGame();
-                setcolor(WHITE);
-                circle(120+i, 640, 7);
-                setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(120+i,640,15);
-                delay(10);
-            }
-        }
-        else if(numberAtDice == 3)
-        {
-            for(int i = 1; i <= THREE; i++)
-            {
-                cleardevice();
-                startGame();
-                setcolor(WHITE);
-                circle(120+i, 640, 7);
-                setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(120+i,640,15);
-                delay(10);
-            }
-        }
-        else if(numberAtDice == 4)
-        {
-            for(int i = 1; i <= FOUR; i++)
-            {
-                cleardevice();
-                startGame();
-                setcolor(WHITE);
-                circle(120+i, 640, 7);
-                setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(120+i,640,15);
-                delay(10);
-            }
-        }
-        else if(numberAtDice == 5)
-        {
-            for(int i = 1; i <= FIVE; i++)
-            {
-                cleardevice();
-                startGame();
-                setcolor(WHITE);
-                circle(120+i, 640, 7);
-                setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(120+i,640,15);
-                delay(10);
-            }
-        }
-        else if(numberAtDice == 6)
-        {
-            for(int i = 1; i <= SIX; i++)
-            {
-                cleardevice();
-                startGame();
-                setcolor(WHITE);
-                circle(120+i, 640, 7);
-                setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(120+i,640,15);
-                delay(10);
-            }
-        }
+
     }
-}
+            // PLAYER ONE WILL DISAPPER BCOZ OF CLEAR DEICE IN BOT FUNC, NEW POS OF PLAYER ONE WILL GET CLEAR
