@@ -12,7 +12,6 @@ using namespace std;
 #define screenWidth GetSystemMetrics(SM_CXSCREEN)
 #define screenHeight GetSystemMetrics(SM_CYSCREEN)
 #define ONE 56
-
 #define ONE_Y 49
 
 // Declare Functions here
@@ -20,10 +19,10 @@ void startGame();
 void instructions();
 void endGame();
 void gameFunction();
-void playerOne(char, int, int);
-void bot(char, int, int);
+void playerOne(int, int);
+void bot(int, int);
 int throwDice();
-void moveFromLadderToLadder(char, int, int, char);
+void moveFromLadderAndSnake(char, int, int, char);
 void moveToNextNumber(char, int, int);
 
 // Global Variable Declarations
@@ -38,6 +37,10 @@ int main()
 {
 // Output Window set to full width
     initwindow(screenWidth+3, screenHeight+1, "",-6,-4);
+
+    POINT CursorPosition;
+    int cursorX, cursorY;
+    int choice;
 
 // STYLED
 //    setcolor(10);
@@ -63,7 +66,6 @@ int main()
 ////    bgiout << "END GAME" << endl;
 ////    outstreamxy(695,550);
 //    outtextxy(695,550,"QUIT GAME");
-
 
 // NORMALIZE
    setcolor(10);
@@ -97,11 +99,6 @@ int main()
    rectangle(550,440,650,475);
 //    outtextxy(695,550,"QUIT GAME");
 
-
-    POINT CursorPosition;
-    int cursorY, cursorX;
-
-    int choice;
     while(cursorX != 0 && cursorY != 0)
     {
         cursorX = CursorPosition.x;
@@ -114,13 +111,11 @@ int main()
                 choice = 1;
                 break;
             }
-//            rectangle(540,390,660,425);
             else if(cursorX > 540 && cursorY > 390 && cursorX < 660 && cursorY < 425)
             {
                 choice = 2;
                 break;
             }
-//            rectangle(550,440,650,475);
             else if(cursorX > 550 && cursorY > 440 && cursorX < 650 && cursorY < 475)
             {
                 choice = 3;
@@ -135,8 +130,8 @@ int main()
     {
         case 1 :
             startGame();
-            playerOne('P', playerOne_XCord, playerOne_YCord);
-            bot('B', bot_XCord, bot_YCord);
+            playerOne(playerOne_XCord, playerOne_YCord);
+            bot(bot_XCord, bot_YCord);
             gameFunction();
             getch();
             break;
@@ -182,37 +177,38 @@ void startGame()
         reverseLine++;
     }
     outstreamxy(95, 200);
-// vertical outline and inline from left to right
+
+    // vertical outline and inline from left to right
     setlinestyle(0,0,3);
     setcolor(WHITE);
+
     line(106,167,106,652);
     line(162,167,162,652);
-    line(218,167,218,652);
-    line(274,167,274,652);
-    line(332,167,332,652);
-    line(387,167,387,652);
-    line(443,167,443,652);
-    line(500,167,500,652);
-    line(555,167,555,652);
-    line(612,167,612,652);
+    line(216,167,216,652);
+    line(272,167,272,652);
+    line(328,167,328,652);
+    line(384,167,384,652);
+    line(441,167,441,652);
+    line(497,167,497,652);
+    line(552,167,552,652);
+    line(609,167,609,652);
     line(668,167,668,652);
-// horizontal outline and inline from down to up
 
+    // horizontal outline and inline from down to up
     line(106,652,668,652);
-    line(106,600,668,600);
+    line(106,602,668,602);
     line(106,552,668,552);
     line(106,504,668,504);
     line(106,456,668,456);
     line(106,408,668,408);
     line(106,360,668,360);
     line(106,312,668,312);
-    line(106,264,668,264);
-    line(106,216,668,216);
-    line(106,167,668,167);
+    line(106,263,668,263);
+    line(106,215,668,215);
+    line(106,164,668,164);
 
     // Created ladders here
     setcolor(GREEN);
-    setlinestyle(0,0,3);
     line(252,295,420,195);//95
     line(535,240,645,433);//88
     line(185,583,466,292);//19
@@ -220,16 +216,10 @@ void startGame()
 
     // Created Snakes here
     setcolor(RED);
-
     line(186,200,533,531);//32
     line(295,340,128,480);//64
     line(408,623,292,436);//06
     line(532,382,636,236);//53
-
-
-    // Created Demo Players
-//    playerOne();
-//    bot();
 
 }// END OF startGame()
 
@@ -261,7 +251,6 @@ void gameFunction()
 //        getch();
 //    }
 
-
     cout << "\n* Player position at start : " << playerOnePosition << endl;
     cout << "* Bot position at start : " << botPosition << endl;
     getch();
@@ -276,10 +265,10 @@ void gameFunction()
         cout << "-> Random Number for Bot : " << randomNumberForBot << endl << endl;
         getch();
 
-
         if(randomNumberForPlayerOne + playerOnePosition > 100){} // FOR number greater than 100(will never be true)
         else if(randomNumberForPlayerOne + playerOnePosition == 100) // WHEN dice is thrown and requireed num to win comes
         {
+            cout << "randomNumberForPlayerOne + playerOnePosition = " << (randomNumberForPlayerOne + playerOnePosition) << endl;
             cout << "player won" << endl;
             getch();
             break;
@@ -289,175 +278,170 @@ void gameFunction()
             moveToNextNumber('P', randomNumberForPlayerOne, playerOnePosition);
             playerOnePosition += randomNumberForPlayerOne;
 
-        switch(randomNumberForPlayerOne)
-        {
-            case 1 :
-                cout <<"INSIDE case 1\n\n";
-                if(playerOnePosition == 10) {moveFromLadderToLadder('P',1,10,'L');}
-                else if(playerOnePosition == 19) {moveFromLadderToLadder('P',1,19,'L');}
-                else if(playerOnePosition == 50) {moveFromLadderToLadder('P',1,50,'L');}
-                else if(playerOnePosition == 78) {moveFromLadderToLadder('P',1,78,'L');}
-                else if(playerOnePosition == 44) {moveFromLadderToLadder('P',1,44,'S');} // SNAKE
-                else if(playerOnePosition == 64) {moveFromLadderToLadder('P',1,64,'S');}
-                else if(playerOnePosition == 90) {moveFromLadderToLadder('P',1,90,'S');}
-                else if(playerOnePosition == 99) {moveFromLadderToLadder('P',1,99,'S');}
+            switch(randomNumberForPlayerOne)
+            {
+                case 1 :
+                    cout <<"INSIDE case 1\n\n";
+                    if(playerOnePosition == 10) {moveFromLadderAndSnake('P',1,10,'L');}
+                    else if(playerOnePosition == 19) {moveFromLadderAndSnake('P',1,19,'L');}
+                    else if(playerOnePosition == 50) {moveFromLadderAndSnake('P',1,50,'L');}
+                    else if(playerOnePosition == 78) {moveFromLadderAndSnake('P',1,78,'L');}
+                    else if(playerOnePosition == 44) {moveFromLadderAndSnake('P',1,44,'S');} // SNAKE
+                    else if(playerOnePosition == 64) {moveFromLadderAndSnake('P',1,64,'S');}
+                    else if(playerOnePosition == 90) {moveFromLadderAndSnake('P',1,90,'S');}
+                    else if(playerOnePosition == 99) {moveFromLadderAndSnake('P',1,99,'S');}
 
-            case 2 :
-                cout <<"INSIDE case 2\n\n";
-                if(playerOnePosition == 10) {moveFromLadderToLadder('P',2,10,'L');}
-                else if(playerOnePosition == 19) {moveFromLadderToLadder('P',2,19,'L');}
-                else if(playerOnePosition == 50) {moveFromLadderToLadder('P',2,50,'L');}
-                else if(playerOnePosition == 78) {moveFromLadderToLadder('P',2,78,'L');}
-                else if(playerOnePosition == 44) {moveFromLadderToLadder('P',2,44,'S');} // SNAKE
-                else if(playerOnePosition == 64) {moveFromLadderToLadder('P',2,64,'S');}
-                else if(playerOnePosition == 90) {moveFromLadderToLadder('P',2,90,'S');}
-                else if(playerOnePosition == 99) {moveFromLadderToLadder('P',2,99,'S');}
+                case 2 :
+                    cout <<"INSIDE case 2\n\n";
+                    if(playerOnePosition == 10) {moveFromLadderAndSnake('P',2,10,'L');}
+                    else if(playerOnePosition == 19) {moveFromLadderAndSnake('P',2,19,'L');}
+                    else if(playerOnePosition == 50) {moveFromLadderAndSnake('P',2,50,'L');}
+                    else if(playerOnePosition == 78) {moveFromLadderAndSnake('P',2,78,'L');}
+                    else if(playerOnePosition == 44) {moveFromLadderAndSnake('P',2,44,'S');} // SNAKE
+                    else if(playerOnePosition == 64) {moveFromLadderAndSnake('P',2,64,'S');}
+                    else if(playerOnePosition == 90) {moveFromLadderAndSnake('P',2,90,'S');}
+                    else if(playerOnePosition == 99) {moveFromLadderAndSnake('P',2,99,'S');}
 
-            case 3 :
-                cout <<"INSIDE case 3\n\n";
-                if(playerOnePosition == 10) {moveFromLadderToLadder('P',3,10,'L');}
-                else if(playerOnePosition == 19) {moveFromLadderToLadder('P',3,19,'L');}
-                else if(playerOnePosition == 50) {moveFromLadderToLadder('P',3,50,'L');}
-                else if(playerOnePosition == 78) {moveFromLadderToLadder('P',3,78,'L');}
-                else if(playerOnePosition == 44) {moveFromLadderToLadder('P',3,44,'S');} // SNAKE
-                else if(playerOnePosition == 64) {moveFromLadderToLadder('P',3,64,'S');}
-                else if(playerOnePosition == 90) {moveFromLadderToLadder('P',3,90,'S');}
-                else if(playerOnePosition == 99) {moveFromLadderToLadder('P',3,99,'S');}
+                case 3 :
+                    cout <<"INSIDE case 3\n\n";
+                    if(playerOnePosition == 10) {moveFromLadderAndSnake('P',3,10,'L');}
+                    else if(playerOnePosition == 19) {moveFromLadderAndSnake('P',3,19,'L');}
+                    else if(playerOnePosition == 50) {moveFromLadderAndSnake('P',3,50,'L');}
+                    else if(playerOnePosition == 78) {moveFromLadderAndSnake('P',3,78,'L');}
+                    else if(playerOnePosition == 44) {moveFromLadderAndSnake('P',3,44,'S');} // SNAKE
+                    else if(playerOnePosition == 64) {moveFromLadderAndSnake('P',3,64,'S');}
+                    else if(playerOnePosition == 90) {moveFromLadderAndSnake('P',3,90,'S');}
+                    else if(playerOnePosition == 99) {moveFromLadderAndSnake('P',3,99,'S');}
 
-            case 4 :
-                cout <<"INSIDE case 4\n\n";
-                if(playerOnePosition == 10) {moveFromLadderToLadder('P',4,10,'L');}
-                else if(playerOnePosition == 19) {moveFromLadderToLadder('P',4,19,'L');}
-                else if(playerOnePosition == 50) {moveFromLadderToLadder('P',4,50,'L');}
-                else if(playerOnePosition == 78) {moveFromLadderToLadder('P',4,78,'L');}
-                else if(playerOnePosition == 44) {moveFromLadderToLadder('P',4,44,'S');} // SNAKE
-                else if(playerOnePosition == 64) {moveFromLadderToLadder('P',4,64,'S');}
-                else if(playerOnePosition == 90) {moveFromLadderToLadder('P',4,90,'S');}
-                else if(playerOnePosition == 99) {moveFromLadderToLadder('P',4,99,'S');}
+                case 4 :
+                    cout <<"INSIDE case 4\n\n";
+                    if(playerOnePosition == 10) {moveFromLadderAndSnake('P',4,10,'L');}
+                    else if(playerOnePosition == 19) {moveFromLadderAndSnake('P',4,19,'L');}
+                    else if(playerOnePosition == 50) {moveFromLadderAndSnake('P',4,50,'L');}
+                    else if(playerOnePosition == 78) {moveFromLadderAndSnake('P',4,78,'L');}
+                    else if(playerOnePosition == 44) {moveFromLadderAndSnake('P',4,44,'S');} // SNAKE
+                    else if(playerOnePosition == 64) {moveFromLadderAndSnake('P',4,64,'S');}
+                    else if(playerOnePosition == 90) {moveFromLadderAndSnake('P',4,90,'S');}
+                    else if(playerOnePosition == 99) {moveFromLadderAndSnake('P',4,99,'S');}
 
-            case 5 :
-                cout <<"INSIDE case 5\n\n";
-                if(playerOnePosition == 10) {moveFromLadderToLadder('P',5,10,'L');}
-                else if(playerOnePosition == 19) {moveFromLadderToLadder('P',5,19,'L');}
-                else if(playerOnePosition == 50) {moveFromLadderToLadder('P',5,50,'L');}
-                else if(playerOnePosition == 78) {moveFromLadderToLadder('P',5,78,'L');}
-                else if(playerOnePosition == 44) {moveFromLadderToLadder('P',5,44,'S');} // SNAKE
-                else if(playerOnePosition == 64) {moveFromLadderToLadder('P',5,64,'S');}
-                else if(playerOnePosition == 90) {moveFromLadderToLadder('P',5,90,'S');}
-                else if(playerOnePosition == 99) {moveFromLadderToLadder('P',5,99,'S');}
+                case 5 :
+                    cout <<"INSIDE case 5\n\n";
+                    if(playerOnePosition == 10) {moveFromLadderAndSnake('P',5,10,'L');}
+                    else if(playerOnePosition == 19) {moveFromLadderAndSnake('P',5,19,'L');}
+                    else if(playerOnePosition == 50) {moveFromLadderAndSnake('P',5,50,'L');}
+                    else if(playerOnePosition == 78) {moveFromLadderAndSnake('P',5,78,'L');}
+                    else if(playerOnePosition == 44) {moveFromLadderAndSnake('P',5,44,'S');} // SNAKE
+                    else if(playerOnePosition == 64) {moveFromLadderAndSnake('P',5,64,'S');}
+                    else if(playerOnePosition == 90) {moveFromLadderAndSnake('P',5,90,'S');}
+                    else if(playerOnePosition == 99) {moveFromLadderAndSnake('P',5,99,'S');}
 
-            case 6 :
-                cout <<"INSIDE case 6\n\n";
-                if(playerOnePosition == 10) {moveFromLadderToLadder('P',6,10,'L');}
-                else if(playerOnePosition == 19) {moveFromLadderToLadder('P',6,19,'L');}
-                else if(playerOnePosition == 50) {moveFromLadderToLadder('P',6,50,'L');}
-                else if(playerOnePosition == 78) {moveFromLadderToLadder('P',6,78,'L');}
-                else if(playerOnePosition == 44) {moveFromLadderToLadder('P',6,44,'S');} // SNAKE
-                else if(playerOnePosition == 64) {moveFromLadderToLadder('P',6,64,'S');}
-                else if(playerOnePosition == 90) {moveFromLadderToLadder('P',6,90,'S');}
-                else if(playerOnePosition == 99) {moveFromLadderToLadder('P',6,99,'S');}
+                case 6 :
+                    cout <<"INSIDE case 6\n\n";
+                    if(playerOnePosition == 10) {moveFromLadderAndSnake('P',6,10,'L');}
+                    else if(playerOnePosition == 19) {moveFromLadderAndSnake('P',6,19,'L');}
+                    else if(playerOnePosition == 50) {moveFromLadderAndSnake('P',6,50,'L');}
+                    else if(playerOnePosition == 78) {moveFromLadderAndSnake('P',6,78,'L');}
+                    else if(playerOnePosition == 44) {moveFromLadderAndSnake('P',6,44,'S');} // SNAKE
+                    else if(playerOnePosition == 64) {moveFromLadderAndSnake('P',6,64,'S');}
+                    else if(playerOnePosition == 90) {moveFromLadderAndSnake('P',6,90,'S');}
+                    else if(playerOnePosition == 99) {moveFromLadderAndSnake('P',6,99,'S');}
 
-        }// END OF SWTICH CASE FOR PLAYER ONE
-
+            }// END OF SWTICH CASE FOR PLAYER ONE
             cout << "Player position after adding with above Random Number : " << playerOnePosition << endl;
         }
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // BOT - MEGENTA COLOUR
 
-        if(randomNumberForBot + botPosition > 100)
-        {}
+        if(randomNumberForBot + botPosition > 100){}
         else if(randomNumberForBot + botPosition == 100)
         {
+            cout << "randomNumberForBot + botPosition = " << (randomNumberForBot + botPosition) << endl;
             cout << "bot won" << endl;
             getch();
             break;
         }
         else
         {
+            moveToNextNumber('B',randomNumberForBot, botPosition);
             botPosition += randomNumberForBot;
-//            moveToNextNumber('B',randomNumberForBot, botPosition);
+
+            switch(randomNumberForBot)
+            {
+                case 1 :
+                    if(botPosition == 10) {moveFromLadderAndSnake('B',1,10,'L');}
+                    else if(botPosition == 19) {moveFromLadderAndSnake('B',1,19,'L');}
+                    else if(botPosition == 50) {moveFromLadderAndSnake('B',1,50,'L');}
+                    else if(botPosition == 78) {moveFromLadderAndSnake('B',1,78,'L');}
+                    else if(botPosition == 44) {moveFromLadderAndSnake('B',1,44,'S');} // SNAKE
+                    else if(botPosition == 64) {moveFromLadderAndSnake('B',1,64,'S');}
+                    else if(botPosition == 90) {moveFromLadderAndSnake('B',1,90,'S');}
+                    else if(botPosition == 99) {moveFromLadderAndSnake('B',1,99,'S');}
+
+                case 2 :
+                    if(botPosition == 10) {moveFromLadderAndSnake('B',2,10,'L');}
+                    else if(botPosition == 19) {moveFromLadderAndSnake('B',2,19,'L');}
+                    else if(botPosition == 50) {moveFromLadderAndSnake('B',2,50,'L');}
+                    else if(botPosition == 78) {moveFromLadderAndSnake('B',2,78,'L');}
+                    else if(botPosition == 44) {moveFromLadderAndSnake('B',2,44,'S');} // SNAKE
+                    else if(botPosition == 64) {moveFromLadderAndSnake('B',2,64,'S');}
+                    else if(botPosition == 90) {moveFromLadderAndSnake('B',2,90,'S');}
+                    else if(botPosition == 99) {moveFromLadderAndSnake('B',2,99,'S');}
+
+                case 3 :
+                    if(botPosition == 10) {moveFromLadderAndSnake('B',3,10,'L');}
+                    else if(botPosition == 19) {moveFromLadderAndSnake('B',3,19,'L');}
+                    else if(botPosition == 50) {moveFromLadderAndSnake('B',3,50,'L');}
+                    else if(botPosition == 78) {moveFromLadderAndSnake('B',3,78,'L');}
+                    else if(botPosition == 44) {moveFromLadderAndSnake('B',3,44,'S');} // SNAKE
+                    else if(botPosition == 64) {moveFromLadderAndSnake('B',3,64,'S');}
+                    else if(botPosition == 90) {moveFromLadderAndSnake('B',3,90,'S');}
+                    else if(botPosition == 99) {moveFromLadderAndSnake('B',3,99,'S');}
+
+                case 4 :
+                    if(botPosition == 10) {moveFromLadderAndSnake('B',4,10,'L');}
+                    else if(botPosition == 19) {moveFromLadderAndSnake('B',4,19,'L');}
+                    else if(botPosition == 50) {moveFromLadderAndSnake('B',4,50,'L');}
+                    else if(botPosition == 78) {moveFromLadderAndSnake('B',4,78,'L');}
+                    else if(botPosition == 44) {moveFromLadderAndSnake('B',4,44,'S');} // SNAKE
+                    else if(botPosition == 64) {moveFromLadderAndSnake('B',4,64,'S');}
+                    else if(botPosition == 90) {moveFromLadderAndSnake('B',4,90,'S');}
+                    else if(botPosition == 99) {moveFromLadderAndSnake('B',4,99,'S');}
+
+                case 5 :
+                    if(botPosition == 10) {moveFromLadderAndSnake('B',5,10,'L');}
+                    else if(botPosition == 19) {moveFromLadderAndSnake('B',5,19,'L');}
+                    else if(botPosition == 50) {moveFromLadderAndSnake('B',5,50,'L');}
+                    else if(botPosition == 78) {moveFromLadderAndSnake('B',5,78,'L');}
+                    else if(botPosition == 44) {moveFromLadderAndSnake('B',5,44,'S');} // SNAKE
+                    else if(botPosition == 64) {moveFromLadderAndSnake('B',5,64,'S');}
+                    else if(botPosition == 90) {moveFromLadderAndSnake('B',5,90,'S');}
+                    else if(botPosition == 99) {moveFromLadderAndSnake('B',5,99,'S');}
+
+                case 6 :
+                    if(botPosition == 10) {moveFromLadderAndSnake('B',6,10,'L');}
+                    else if(botPosition == 19) {moveFromLadderAndSnake('B',6,19,'L');}
+                    else if(botPosition == 50) {moveFromLadderAndSnake('B',6,50,'L');}
+                    else if(botPosition == 78) {moveFromLadderAndSnake('B',6,78,'L');}
+                    else if(botPosition == 44) {moveFromLadderAndSnake('B',6,44,'S');} // SNAKE
+                    else if(botPosition == 64) {moveFromLadderAndSnake('B',6,64,'S');}
+                    else if(botPosition == 90) {moveFromLadderAndSnake('B',6,90,'S');}
+                    else if(botPosition == 99) {moveFromLadderAndSnake('B',6,99,'S');}
+            }// END OF SWTICH CASE FOR BOT
             cout << "Bot position after adding with above Random Number : " << botPosition << endl;
-        }
-
-        switch(randomNumberForBot)
-        {
-            case 1 :
-                if(botPosition == 10) {moveFromLadderToLadder('B',1,10,'L');}
-                else if(botPosition == 19) {moveFromLadderToLadder('B',1,19,'L');}
-                else if(botPosition == 50) {moveFromLadderToLadder('B',1,50,'L');}
-                else if(botPosition == 78) {moveFromLadderToLadder('B',1,78,'L');}
-                else if(botPosition == 44) {moveFromLadderToLadder('B',1,44,'S');} // SNAKE
-                else if(botPosition == 64) {moveFromLadderToLadder('B',1,64,'S');}
-                else if(botPosition == 90) {moveFromLadderToLadder('B',1,90,'S');}
-                else if(botPosition == 99) {moveFromLadderToLadder('B',1,99,'S');}
-
-            case 2 :
-                if(botPosition == 10) {moveFromLadderToLadder('B',2,10,'L');}
-                else if(botPosition == 19) {moveFromLadderToLadder('B',2,19,'L');}
-                else if(botPosition == 50) {moveFromLadderToLadder('B',2,50,'L');}
-                else if(botPosition == 78) {moveFromLadderToLadder('B',2,78,'L');}
-                else if(botPosition == 44) {moveFromLadderToLadder('B',2,44,'S');} // SNAKE
-                else if(botPosition == 64) {moveFromLadderToLadder('B',2,64,'S');}
-                else if(botPosition == 90) {moveFromLadderToLadder('B',2,90,'S');}
-                else if(botPosition == 99) {moveFromLadderToLadder('B',2,99,'S');}
-
-            case 3 :
-                if(botPosition == 10) {moveFromLadderToLadder('B',3,10,'L');}
-                else if(botPosition == 19) {moveFromLadderToLadder('B',3,19,'L');}
-                else if(botPosition == 50) {moveFromLadderToLadder('B',3,50,'L');}
-                else if(botPosition == 78) {moveFromLadderToLadder('B',3,78,'L');}
-                else if(botPosition == 44) {moveFromLadderToLadder('B',3,44,'S');} // SNAKE
-                else if(botPosition == 64) {moveFromLadderToLadder('B',3,64,'S');}
-                else if(botPosition == 90) {moveFromLadderToLadder('B',3,90,'S');}
-                else if(botPosition == 99) {moveFromLadderToLadder('B',3,99,'S');}
-
-            case 4 :
-                if(botPosition == 10) {moveFromLadderToLadder('B',4,10,'L');}
-                else if(botPosition == 19) {moveFromLadderToLadder('B',4,19,'L');}
-                else if(botPosition == 50) {moveFromLadderToLadder('B',4,50,'L');}
-                else if(botPosition == 78) {moveFromLadderToLadder('B',4,78,'L');}
-                else if(botPosition == 44) {moveFromLadderToLadder('B',4,44,'S');} // SNAKE
-                else if(botPosition == 64) {moveFromLadderToLadder('B',4,64,'S');}
-                else if(botPosition == 90) {moveFromLadderToLadder('B',4,90,'S');}
-                else if(botPosition == 99) {moveFromLadderToLadder('B',4,99,'S');}
-
-            case 5 :
-                if(botPosition == 10) {moveFromLadderToLadder('B',5,10,'L');}
-                else if(botPosition == 19) {moveFromLadderToLadder('B',5,19,'L');}
-                else if(botPosition == 50) {moveFromLadderToLadder('B',5,50,'L');}
-                else if(botPosition == 78) {moveFromLadderToLadder('B',5,78,'L');}
-                else if(botPosition == 44) {moveFromLadderToLadder('B',5,44,'S');} // SNAKE
-                else if(botPosition == 64) {moveFromLadderToLadder('B',5,64,'S');}
-                else if(botPosition == 90) {moveFromLadderToLadder('B',5,90,'S');}
-                else if(botPosition == 99) {moveFromLadderToLadder('B',5,99,'S');}
-
-            case 6 :
-                if(botPosition == 10) {moveFromLadderToLadder('B',6,10,'L');}
-                else if(botPosition == 19) {moveFromLadderToLadder('B',6,19,'L');}
-                else if(botPosition == 50) {moveFromLadderToLadder('B',6,50,'L');}
-                else if(botPosition == 78) {moveFromLadderToLadder('B',6,78,'L');}
-                else if(botPosition == 44) {moveFromLadderToLadder('B',6,44,'S');} // SNAKE
-                else if(botPosition == 64) {moveFromLadderToLadder('B',6,64,'S');}
-                else if(botPosition == 90) {moveFromLadderToLadder('B',6,90,'S');}
-                else if(botPosition == 99) {moveFromLadderToLadder('B',6,99,'S');}
-
-        }// END OF SWTICH CASE FOR BOT
+        }// END OF ELSE ABOVE SWITCH CASE
     }// END OF WHILE LOOP
-}// END OF gameFunction
+}// END OF gameFunction()
 
-void playerOne(char ch, int X_cord, int Y_cord)
+void playerOne(int X_cord, int Y_cord)
 {
     setcolor(WHITE);
     circle(X_cord, Y_cord, 7);
     setfillstyle(SOLID_FILL,BLUE);
     floodfill(X_cord, Y_cord, 15);
-
-    // difference is of 56 between 1st and 2nd number
 }// END OF playerOne()
 
-void bot(char ch, int X_cord, int Y_cord)
+void bot(int X_cord, int Y_cord)
 {
     setcolor(WHITE);
     circle(X_cord, Y_cord, 7);
@@ -472,7 +456,7 @@ int throwDice()
     return dice;
 }// END OF throwDice()
 
-void moveFromLadderToLadder(char ch, int numberOnDice, int obsNumber, char obs)// P 6 18 L
+void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)// P 6 18 L
 {
     // FOR LADDER
     if(obs == 'L')
@@ -481,22 +465,33 @@ void moveFromLadderToLadder(char ch, int numberOnDice, int obsNumber, char obs)/
         {
             if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
             {
+                cout <<"X CORD : " << playerOne_XCord << endl;
+                cout <<"Y CORD : " << playerOne_YCord <<endl;
                 playerOnePosition = 35;
-                setcolor(15);
-                circle(400, 470, 7);
-                setfillstyle(SOLID_FILL,BLUE);
-                floodfill(400, 470, 15);
+                playerOne_XCord = 400;
+                playerOne_YCord = 471;
+                cleardevice();
+                startGame();
+                playerOne(playerOne_XCord,playerOne_YCord);
+
+                cout <<"AFTER, PLAYER : \nX CORD : " << playerOne_XCord << endl;
+                cout <<"Y CORD : " << playerOne_YCord <<endl;
             }
         }
         else if(ch == 'B' && obsNumber == 10) // for bot with any dice num but at LADDER 10
         {
             if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
             {
+                cout << "X CORD : " << bot_XCord << endl;
+                cout << "Y CORD : " << bot_YCord << endl;
                 botPosition = 35;
-                setcolor(15);
-                circle(400, 492, 7);
-                setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(400, 492, 15);
+                bot_XCord = 400;
+                bot_YCord = 493;
+                cleardevice();
+                startGame();
+                bot(bot_XCord,bot_YCord);
+                cout << "AFTER, BOT : \nX CORD : " << bot_XCord << endl;
+                cout << "Y CORD : " << bot_YCord << endl;
             }
         }
         else if(ch == 'P' && obsNumber == 19) // for player with any dice num but at LADDER 19
@@ -504,21 +499,31 @@ void moveFromLadderToLadder(char ch, int numberOnDice, int obsNumber, char obs)/
             if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
             {
                 playerOnePosition = 74;
-                setcolor(15);
-                circle(460, 278, 7);
-                setfillstyle(SOLID_FILL,BLUE);
-                floodfill(460, 278, 15);
+                cout << "X CORD : " << playerOne_XCord << endl;
+                cout << "Y CORD : " << playerOne_YCord <<endl;
+                playerOne_XCord = 456;
+                playerOne_YCord = 275;
+                cleardevice();
+                startGame();
+                playerOne(playerOne_XCord,playerOne_YCord);
+                cout <<"AFTER, PLAYER : \nX CORD : " << playerOne_XCord << endl;
+                cout <<"Y CORD : " << playerOne_YCord <<endl;
             }
         }
         else if(ch == 'B' && obsNumber == 19) // for bot with any dice num but at LADDER 19
         {
             if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
             {
+                cout << "X CORD : " << bot_XCord << endl;
+                cout << "Y CORD : " << bot_YCord << endl;
                 botPosition = 74;
-                setcolor(15);
-                circle(460, 300, 7);
-                setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(460, 300, 15);
+                bot_XCord = 456;
+                bot_YCord = 297;
+                cleardevice();
+                startGame();
+                bot(bot_XCord,bot_YCord);
+                cout << "AFTER, BOT : \nX CORD : " << bot_XCord << endl;
+                cout << "Y CORD : " << bot_YCord << endl;
             }
         }
         else if(ch == 'P' && obsNumber == 50) // for player with any dice num but at LADDER 50
@@ -526,21 +531,31 @@ void moveFromLadderToLadder(char ch, int numberOnDice, int obsNumber, char obs)/
             if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
             {
                 playerOnePosition = 88;
-                setcolor(15);
-                circle(515, 230, 7);
-                setfillstyle(SOLID_FILL,BLUE);
-                floodfill(515, 230, 15);
+                cout <<"X CORD : " << playerOne_XCord << endl;
+                cout <<"Y CORD : " << playerOne_YCord <<endl;
+                playerOne_XCord = 512;
+                playerOne_YCord = 226;
+                cleardevice();
+                startGame();
+                playerOne(playerOne_XCord,playerOne_YCord);
+                cout <<"AFTER, PLAYER : \nX CORD : " << playerOne_XCord << endl;
+                cout <<"Y CORD : " << playerOne_YCord <<endl;
             }
         }
         else if(ch == 'B' && obsNumber == 50) // for bot with any dice num but at LADDER 50
         {
             if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
             {
+                cout << "X CORD : " << bot_XCord << endl;
+                cout << "Y CORD : " << bot_YCord << endl;
                 botPosition = 88;
-                setcolor(15);
-                circle(515, 252, 7);
-                setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(515, 252, 15);
+                bot_XCord = 512;
+                bot_YCord = 248;
+                cleardevice();
+                startGame();
+                bot(bot_XCord,bot_YCord);
+                cout << "AFTER, BOT : \nX CORD : " << bot_XCord << endl;
+                cout << "Y CORD : " << bot_YCord << endl;
             }
         }
         else if(ch == 'P' && obsNumber == 78) // for player with any dice num but at LADDER 78
@@ -548,48 +563,67 @@ void moveFromLadderToLadder(char ch, int numberOnDice, int obsNumber, char obs)/
             if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
             {
                 playerOnePosition = 95;
-                setcolor(15);
-                circle(402, 183, 7);
-                setfillstyle(SOLID_FILL,BLUE);
-                floodfill(402, 183, 15);
+                cout <<"X CORD : " << playerOne_XCord << endl;
+                cout <<"Y CORD : " << playerOne_YCord <<endl;
+                playerOne_XCord = 400;
+                playerOne_YCord = 177;
+                cleardevice();
+                startGame();
+                playerOne(playerOne_XCord,playerOne_YCord);
+                cout <<"AFTER, PLAYER : \nX CORD : " << playerOne_XCord << endl;
+                cout <<"Y CORD : " << playerOne_YCord <<endl;
             }
         }
         else if(ch == 'B' && obsNumber == 78) // for bot with any dice num but at LADDER 78
         {
             if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
             {
+                cout << "X CORD : " << bot_XCord << endl;
+                cout << "Y CORD : " << bot_YCord << endl;
                 botPosition = 95;
-                setcolor(15);
-                circle(402, 205, 7);
-                setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(402, 205, 15);
+                bot_XCord = 400;
+                bot_YCord = 199;
+                cleardevice();
+                startGame();
+                bot(bot_XCord,bot_YCord);
+                cout << "AFTER, BOT : \nX CORD : " << bot_XCord << endl;
+                cout << "Y CORD : " << bot_YCord << endl;
             }
         }
     }
     // FOR SNAKES
     else if(obs == 'S')
     {
-
         if(ch == 'P' && obsNumber == 44) // for player with any dice num but at SNAKE 44
         {
             if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
             {
                 playerOnePosition = 6;
-                setcolor(15);
-                circle(400, 618, 7);
-                setfillstyle(SOLID_FILL,BLUE);
-                floodfill(400, 618, 15);
+                cout << "X CORD : " << playerOne_XCord << endl;
+                cout << "Y CORD : " << playerOne_YCord <<endl;
+                playerOne_XCord = 400;
+                playerOne_YCord = 618;
+                cleardevice();
+                startGame();
+                playerOne(playerOne_XCord,playerOne_YCord);
+                cout <<"AFTER, PLAYER : \nX CORD : " << playerOne_XCord << endl;
+                cout <<"Y CORD : " << playerOne_YCord <<endl;
             }
         }
         else if(ch == 'B' && obsNumber == 44) // for bot with any dice num but at SNAKE 44
         {
             if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
             {
+                cout << "X CORD : " << bot_XCord << endl;
+                cout << "Y CORD : " << bot_YCord << endl;
                 botPosition = 6;
-                setcolor(15);
-                circle(400, 640, 7);
-                setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(400, 640, 15);
+                bot_XCord = 400;
+                bot_YCord = 640;
+                cleardevice();
+                startGame();
+                bot(bot_XCord,bot_YCord);
+                cout << "AFTER, BOT : \nX CORD : " << bot_XCord << endl;
+                cout << "Y CORD : " << bot_YCord << endl;
             }
         }
         else if(ch == 'P' && obsNumber == 64) // for player with any dice num but at SNAKE 64
@@ -597,21 +631,31 @@ void moveFromLadderToLadder(char ch, int numberOnDice, int obsNumber, char obs)/
             if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
             {
                 playerOnePosition = 40;
-                setcolor(15);
-                circle(110, 470, 7);
-                setfillstyle(SOLID_FILL,BLUE);
-                floodfill(110, 470, 15);
+                cout << "X CORD : " << playerOne_XCord << endl;
+                cout << "Y CORD : " << playerOne_YCord <<endl;
+                playerOne_XCord = 120;
+                playerOne_YCord = 471;
+                cleardevice();
+                startGame();
+                playerOne(playerOne_XCord,playerOne_YCord);
+                cout <<"AFTER, PLAYER : \nX CORD : " << playerOne_XCord << endl;
+                cout <<"Y CORD : " << playerOne_YCord <<endl;
             }
         }
         else if(ch == 'B' && obsNumber == 64) // for bot with any dice num but at SNAKE 64
         {
             if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
             {
+                cout << "X CORD : " << bot_XCord << endl;
+                cout << "Y CORD : " << bot_YCord << endl;
                 botPosition = 40;
-                setcolor(15);
-                circle(110, 492, 7);
-                setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(110, 492, 15);
+                bot_XCord = 120;
+                bot_YCord = 493;
+                cleardevice();
+                startGame();
+                bot(bot_XCord,bot_YCord);
+                cout << "AFTER, BOT : \nX CORD : " << bot_XCord << endl;
+                cout << "Y CORD : " << bot_YCord << endl;
             }
         }
         else if(ch == 'P' && obsNumber == 90) // for player with any dice num but at SNAKE 90
@@ -619,21 +663,31 @@ void moveFromLadderToLadder(char ch, int numberOnDice, int obsNumber, char obs)/
             if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
             {
                 playerOnePosition = 53;
-                setcolor(15);
-                circle(515, 375, 7);
-                setfillstyle(SOLID_FILL,BLUE);
-                floodfill(515, 375, 15);
+                cout << "X CORD : " << playerOne_XCord << endl;
+                cout << "Y CORD : " << playerOne_YCord <<endl;
+                playerOne_XCord = 512;
+                playerOne_YCord = 373;
+                cleardevice();
+                startGame();
+                playerOne(playerOne_XCord,playerOne_YCord);
+                cout <<"AFTER, PLAYER : \nX CORD : " << playerOne_XCord << endl;
+                cout <<"Y CORD : " << playerOne_YCord <<endl;
             }
         }
         else if(ch == 'B' && obsNumber == 90) // for bot with any dice num but at SNAKE 90
         {
             if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
             {
+                cout << "X CORD : " << bot_XCord << endl;
+                cout << "Y CORD : " << bot_YCord << endl;
                 botPosition = 53;
-                setcolor(15);
-                circle(515, 397, 7);
-                setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(515, 397, 15);
+                bot_XCord = 512;
+                bot_YCord = 395;
+                cleardevice();
+                startGame();
+                bot(bot_XCord,bot_YCord);
+                cout << "AFTER, BOT : \nX CORD : " << bot_XCord << endl;
+                cout << "Y CORD : " << bot_YCord << endl;
             }
         }
         else if(ch == 'P' && obsNumber == 99) // for player with any dice num but at SNAKE 99
@@ -641,21 +695,31 @@ void moveFromLadderToLadder(char ch, int numberOnDice, int obsNumber, char obs)/
             if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
             {
                 playerOnePosition = 28;
-                setcolor(15);
-                circle(513, 520, 7);
-                setfillstyle(SOLID_FILL,BLUE);
-                floodfill(513, 520,15);
+                cout << "X CORD : " << playerOne_XCord << endl;
+                cout << "Y CORD : " << playerOne_YCord << endl;
+                playerOne_XCord = 512;
+                playerOne_YCord = 520;
+                cleardevice();
+                startGame();
+                playerOne(playerOne_XCord,playerOne_YCord);
+                cout <<"AFTER, PLAYER : \nX CORD : " << playerOne_XCord << endl;
+                cout <<"Y CORD : " << playerOne_YCord << endl;
             }
         }
         else if(ch == 'B' && obsNumber == 99) // for bot with any dice num but at SNAKE 99
         {
             if(numberOnDice == 1 || numberOnDice == 2 || numberOnDice == 3 || numberOnDice == 4 || numberOnDice == 5 || numberOnDice == 6)
             {
+                cout << "X CORD : " << bot_XCord << endl;
+                cout << "Y CORD : " << bot_YCord << endl;
                 botPosition = 28;
-                setcolor(15);
-                circle(513, 542, 7);
-                setfillstyle(SOLID_FILL,MAGENTA);
-                floodfill(513, 542,15);
+                bot_XCord = 512;
+                bot_YCord = 542;
+                cleardevice();
+                startGame();
+                bot(bot_XCord,bot_YCord);
+                cout << "AFTER, BOT : \nX CORD : " << bot_XCord << endl;
+                cout << "Y CORD : " << bot_YCord << endl;
             }
         }
     }
@@ -663,88 +727,154 @@ void moveFromLadderToLadder(char ch, int numberOnDice, int obsNumber, char obs)/
 
 void moveToNextNumber(char dine, int numberAtDice, int position)
 {
-//player
+    //player
     if(dine == 'P')
     {
         int reach = numberAtDice+position;
-        cout << "ADDITION OF "<<numberAtDice <<" & " << position << "= " << numberAtDice+position << endl;
+        cout << "ADDITION OF " << numberAtDice << " & " << position << "= " << numberAtDice+position << endl;
         getch();
-            while(position != reach)
+        while(position != reach)
+        {
+            if((playerOne_XCord < 623 && (playerOne_YCord == 618 || playerOne_YCord == 520 || playerOne_YCord == 422 || playerOne_YCord == 324|| playerOne_YCord == 226 || playerOne_YCord == 128)))// FOR X COORDINATE
             {
-                if((playerOne_XCord < 623 && (playerOne_YCord == 618 || playerOne_YCord == 520 || playerOne_YCord == 422 || playerOne_YCord == 324|| playerOne_YCord == 226 || playerOne_YCord == 128)))// FOR X COORDINATE
+                cout << "\n\nSTARTING \n\nX IS : " << playerOne_XCord << endl << "Y IS : " << playerOne_YCord << endl <<endl;
+                for(int i = 1; i <= ONE; i++)
                 {
-                    cout << "\n\nSTARTING \n\nX IS : " << playerOne_XCord << endl << "Y IS : " << playerOne_YCord << endl <<endl;
-                    for(int i = 1; i <= ONE; i++)
-                    {
-                        cleardevice();
-                        startGame();
-                        setcolor(WHITE);
-                        playerOne_XCord += 1;
-                        circle(playerOne_XCord, playerOne_YCord, 7);
-                        setfillstyle(SOLID_FILL,BLUE);
-                        floodfill(playerOne_XCord,playerOne_YCord,15);
-                        delay(2);
-                        cout << "1st LOOP : " << i << "  :  " << playerOne_XCord << endl;
-                    }
-                    cout << "\n\nX IS : " << playerOne_XCord << endl << "Y IS : " << playerOne_YCord << endl <<endl;
-                    position++;
+                    playerOne_XCord += 1;
+                    cleardevice();
+                    startGame();
+                    playerOne(playerOne_XCord,playerOne_YCord);
+                    delay(20);
+                    cout << "1st LOOP : " << i << "  :  " << playerOne_XCord << endl;
                 }
-                else if(playerOne_XCord == 624 && (playerOne_YCord == 618 || playerOne_YCord == 520 ||  playerOne_YCord == 422 || playerOne_YCord == 324|| playerOne_YCord == 226 || playerOne_YCord == 128)) // FOR MAX Y COORDINATE
+                cout << "\n\nX IS : " << playerOne_XCord << endl << "Y IS : " << playerOne_YCord << endl <<endl;
+                position++;
+            }
+            else if(playerOne_XCord == 624 && (playerOne_YCord == 618 || playerOne_YCord == 520 ||  playerOne_YCord == 422 || playerOne_YCord == 324|| playerOne_YCord == 226 || playerOne_YCord == 128)) // FOR MAX Y COORDINATE
+            {
+                for(int i = 1; i <= ONE_Y; i++)
                 {
-                    for(int i = 1; i <= ONE_Y; i++)
-                    {
-                        cleardevice();
-                        startGame();
-                        setcolor(WHITE);
-                        playerOne_YCord -= 1;
-                        circle(playerOne_XCord, playerOne_YCord, 7);
-                        setfillstyle(SOLID_FILL,BLUE);
-                        floodfill(playerOne_XCord,playerOne_YCord,15);
-                        delay(2);
-                        cout << "2nd LOOP : " << i << "  :  " << playerOne_YCord << endl;
-                    }
-                    cout << "\n\nX IS : " << playerOne_XCord << endl << "Y IS : " << playerOne_YCord << endl <<endl;
-                    position++;
+                    cleardevice();
+                    startGame();
+                    playerOne_YCord -= 1;
+                    playerOne(playerOne_XCord,playerOne_YCord);
+                    delay(20);
+                    cout << "2nd LOOP : " << i << "  :  " << playerOne_YCord << endl;
                 }
-                else if((playerOne_XCord > 120 && (playerOne_YCord == 569 || playerOne_YCord == 471 || playerOne_YCord == 373 || playerOne_YCord == 275 || playerOne_YCord == 177 || playerOne_YCord == 79))) // NEGATIVE X COORDINATE
+                cout << "\n\nX IS : " << playerOne_XCord << endl << "Y IS : " << playerOne_YCord << endl <<endl;
+                position++;
+            }
+            else if((playerOne_XCord > 120 && (playerOne_YCord == 569 || playerOne_YCord == 471 || playerOne_YCord == 373 || playerOne_YCord == 275 || playerOne_YCord == 177 || playerOne_YCord == 79))) // NEGATIVE X COORDINATE
+            {
+                for(int i = 1; i <= ONE; i++)
                 {
-                    for(int i = 1; i <= ONE; i++)
-                    {
-                        cleardevice();
-                        startGame();
-                        setcolor(WHITE);
-                        playerOne_XCord -= 1;
-                        circle(playerOne_XCord, playerOne_YCord, 7);
-                        setfillstyle(SOLID_FILL,BLUE);
-                        floodfill(playerOne_XCord,playerOne_YCord,15);
-                        delay(2);
-                        cout << "3rd LOOP : " << i << "  :  " << playerOne_XCord << endl;
-                    }
-                    cout << "\n\nX IS : " << playerOne_XCord << endl << "Y IS : " << playerOne_YCord << endl <<endl;
-                    position++;
+                    cleardevice();
+                    startGame();
+                    playerOne_XCord -= 1;
+                    playerOne(playerOne_XCord,playerOne_YCord);
+                    delay(20);
+                    cout << "3rd LOOP : " << i << "  :  " << playerOne_XCord << endl;
                 }
-                else if((playerOne_XCord == 120 && (playerOne_YCord == 569 || playerOne_YCord ==  471 || playerOne_YCord == 373 || playerOne_YCord == 275 || playerOne_YCord == 177 || playerOne_YCord == 79))) // FOR MIN Y COORDINATE
+                cout << "\n\nX IS : " << playerOne_XCord << endl << "Y IS : " << playerOne_YCord << endl <<endl;
+                position++;
+            }
+            else if((playerOne_XCord == 120 && (playerOne_YCord == 569 || playerOne_YCord ==  471 || playerOne_YCord == 373 || playerOne_YCord == 275 || playerOne_YCord == 177 || playerOne_YCord == 79))) // FOR MIN Y COORDINATE
+            {
+                for(int i = 1; i <= ONE_Y; i++)
                 {
-                    for(int i = 1; i <= ONE_Y; i++)
-                    {
-                        cleardevice();
-                        startGame();
-                        setcolor(WHITE);
-                        playerOne_YCord -= 1;
-                        circle(playerOne_XCord, playerOne_YCord, 7);
-                        setfillstyle(SOLID_FILL,BLUE);
-                        floodfill(playerOne_XCord,playerOne_YCord,15);
-                        delay(2);
-                        cout << "4rd LOOP : " << i << "  :  " << playerOne_YCord << endl;
-                    }
-                    cout << "\n\nX IS : " << playerOne_XCord << endl << "Y IS : " << playerOne_YCord << endl <<endl;
-                    position++;
+                    cleardevice();
+                    startGame();
+                    playerOne_YCord -= 1;
+                    playerOne(playerOne_XCord,playerOne_YCord);
+                    delay(20);
+                    cout << "4rd LOOP : " << i << "  :  " << playerOne_YCord << endl;
                 }
-            }// END OF while loop
-    }
+                cout << "\n\nX IS : " << playerOne_XCord << endl << "Y IS : " << playerOne_YCord << endl <<endl;
+                position++;
+            }
+        }// END OF while loop
+    }// END OF if
+    // bot
     else if(dine == 'B')
     {
+        cout << "This is BOT \n\n";
+        cout << "BOT X = " << bot_XCord << endl;
+        cout << "BOT Y = " << bot_YCord << endl;
+        int reach = numberAtDice+position;
+        cout << "ADDITION OF "<<numberAtDice <<" & " << position << "= " << numberAtDice+position << endl;
+        getch();
+        cout << "position is : " << position << "reach is " << reach << endl;
+        while(position != reach)
+        {
+            cout << "inside while\n";
+            cout << "BOT X = " << bot_XCord << endl;
+            cout << "BOT Y = " << bot_YCord << endl;
 
-    }
-      }      // PLAYER ONE WILL DISAPPER BCOZ OF CLEAR DEICE IN BOT FUNC, NEW POS OF PLAYER ONE WILL GET CLEAR
+            if((bot_XCord < 623 && (bot_YCord == 640 || bot_YCord == 542 || bot_YCord == 444 || bot_YCord == 346 || bot_YCord == 248 || bot_YCord == 150)))// FOR X COORDINATE
+            {
+                cout << "\n\nSTARTING \n\nX IS : " << bot_XCord << endl << "Y IS : " << bot_YCord << endl <<endl;
+                for(int i = 1; i <= ONE; i++)
+                {
+                    cleardevice();
+                    startGame();
+                    bot_XCord += 1;
+                    bot(bot_XCord,bot_YCord);
+                    delay(20);
+                    cout << "1st LOOP : " << i << "  :  " << bot_XCord << endl;
+                }
+                cout << "\n\nX IS : " << bot_XCord << endl << "Y IS : " << bot_YCord << endl <<endl;
+                position++;
+            }
+            else if((bot_XCord == 624 && (bot_YCord == 640 || bot_YCord == 542 || bot_YCord == 444 || bot_YCord == 346 || bot_YCord == 248 || bot_YCord == 150))) // FOR MAX Y COORDINATE
+            {
+                for(int i = 1; i <= ONE_Y; i++)
+                {
+                    cleardevice();
+                    startGame();
+                    bot_YCord -= 1;
+                    bot(bot_XCord,bot_YCord);
+                    delay(20);
+                    cout << "2nd LOOP : " << i << "  :  " << bot_YCord << endl;
+                }
+                cout << "\n\nX IS : " << bot_XCord << endl << "Y IS : " << bot_YCord << endl <<endl;
+                position++;
+            }
+            else if((bot_XCord > 120 && (bot_YCord == 591 || bot_YCord == 493 || bot_YCord == 395 || bot_YCord == 297 || bot_YCord == 199 || bot_YCord == 101))) // NEGATIVE X COORDINATE
+            {
+                for(int i = 1; i <= ONE; i++)
+                {
+                    cleardevice();
+                    startGame();
+                    bot_XCord -= 1;
+                    bot(bot_XCord,bot_YCord);
+                    delay(20);
+                    cout << "3rd LOOP : " << i << "  :  " << bot_XCord << endl;
+                }
+                cout << "\n\nX IS : " << bot_XCord << endl << "Y IS : " << bot_YCord << endl <<endl;
+                position++;
+            }
+            else if((bot_XCord == 120 && (bot_YCord == 591 || bot_YCord == 493 || bot_YCord == 395 || bot_YCord == 297 || bot_YCord == 199 || bot_YCord == 101))) // FOR MIN Y COORDINATE
+            {
+                for(int i = 1; i <= ONE_Y; i++)
+                {
+                    cleardevice();
+                    startGame();
+                    bot_YCord -= 1;
+                    bot(bot_XCord,bot_YCord);
+                    delay(20);
+                    cout << "4rd LOOP : " << i << "  :  " << bot_YCord << endl;
+                }
+                cout << "\n\nX IS : " << bot_XCord<< endl << "Y IS : " << bot_YCord << endl <<endl;
+                position++;
+            }
+        }// END OF while loop
+    }// END OF else if
+// END OF moveToNextNumber FUNCTION
+
+
+// PLAYER ONE WILL DISAPPER BCOZ OF CLEAR DEICE IN BOT FUNC, NEW POS OF PLAYER ONE WILL GET CLEAR
 // move and end when player is near to 100
+// adjust the delay
+
+    
+    
