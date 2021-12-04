@@ -6,11 +6,12 @@ function for game
 
 To do : 
 back to startmenu after instructions
-throw dice button 
-curved snakes
+throw dice button
 ppt
 instructions / end game
 update box
 update "Turn" status
 clickable
-player moving : left - up - right, right - up - left
+
+Not to do : 
+curved snakes
