@@ -1,17 +1,8 @@
-Done : 
-Background
-dice
-player
-function for game
-
 To do : 
+
 back to startmenu after instructions
-throw dice button
+endgame in start menu
 ppt
 instructions / end game
 update box
 update "Turn" status
-clickable
-
-Not to do : 
-curved snakes
