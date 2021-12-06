@@ -325,81 +325,38 @@ void gameFunction()
                             cout << "Player Current Position : " << playerOnePosition << endl;
                             cout << "player won" << endl;
                             cout << "Press 'E' to exit" << endl;
-                            char  key;
-                            while(key != 'E' || key != 'e')
+                            char key;
+                            while(1)
                             {
                                 key = getch();
+                                if(key == 'E' || key == 'e')
+                                    break;
                             }
                             exit(0);
-                            break;
                         }
                         else
                         {
                             moveToNextNumber('P', randomNumberForPlayerOne, playerOnePosition);
                             playerOnePosition += randomNumberForPlayerOne;
 
-                            switch(randomNumberForPlayerOne)
+                            switch(playerOnePosition)
                             {
-                                case 1 :
-                                    if(playerOnePosition == 10) {moveFromLadderAndSnake('P',1,10,'L');}
-                                    else if(playerOnePosition == 19) {moveFromLadderAndSnake('P',1,19,'L');}
-                                    else if(playerOnePosition == 50) {moveFromLadderAndSnake('P',1,50,'L');}
-                                    else if(playerOnePosition == 78) {moveFromLadderAndSnake('P',1,78,'L');}
-                                    else if(playerOnePosition == 44) {moveFromLadderAndSnake('P',1,44,'S');} // SNAKE
-                                    else if(playerOnePosition == 64) {moveFromLadderAndSnake('P',1,64,'S');}
-                                    else if(playerOnePosition == 90) {moveFromLadderAndSnake('P',1,90,'S');}
-                                    else if(playerOnePosition == 99) {moveFromLadderAndSnake('P',1,99,'S');}
-
-                                case 2 :
-                                    if(playerOnePosition == 10) {moveFromLadderAndSnake('P',2,10,'L');}
-                                    else if(playerOnePosition == 19) {moveFromLadderAndSnake('P',2,19,'L');}
-                                    else if(playerOnePosition == 50) {moveFromLadderAndSnake('P',2,50,'L');}
-                                    else if(playerOnePosition == 78) {moveFromLadderAndSnake('P',2,78,'L');}
-                                    else if(playerOnePosition == 44) {moveFromLadderAndSnake('P',2,44,'S');} // SNAKE
-                                    else if(playerOnePosition == 64) {moveFromLadderAndSnake('P',2,64,'S');}
-                                    else if(playerOnePosition == 90) {moveFromLadderAndSnake('P',2,90,'S');}
-                                    else if(playerOnePosition == 99) {moveFromLadderAndSnake('P',2,99,'S');}
-
-                                case 3 :
-                                    if(playerOnePosition == 10) {moveFromLadderAndSnake('P',3,10,'L');}
-                                    else if(playerOnePosition == 19) {moveFromLadderAndSnake('P',3,19,'L');}
-                                    else if(playerOnePosition == 50) {moveFromLadderAndSnake('P',3,50,'L');}
-                                    else if(playerOnePosition == 78) {moveFromLadderAndSnake('P',3,78,'L');}
-                                    else if(playerOnePosition == 44) {moveFromLadderAndSnake('P',3,44,'S');} // SNAKE
-                                    else if(playerOnePosition == 64) {moveFromLadderAndSnake('P',3,64,'S');}
-                                    else if(playerOnePosition == 90) {moveFromLadderAndSnake('P',3,90,'S');}
-                                    else if(playerOnePosition == 99) {moveFromLadderAndSnake('P',3,99,'S');}
-
-                                case 4 :
-                                    if(playerOnePosition == 10) {moveFromLadderAndSnake('P',4,10,'L');}
-                                    else if(playerOnePosition == 19) {moveFromLadderAndSnake('P',4,19,'L');}
-                                    else if(playerOnePosition == 50) {moveFromLadderAndSnake('P',4,50,'L');}
-                                    else if(playerOnePosition == 78) {moveFromLadderAndSnake('P',4,78,'L');}
-                                    else if(playerOnePosition == 44) {moveFromLadderAndSnake('P',4,44,'S');} // SNAKE
-                                    else if(playerOnePosition == 64) {moveFromLadderAndSnake('P',4,64,'S');}
-                                    else if(playerOnePosition == 90) {moveFromLadderAndSnake('P',4,90,'S');}
-                                    else if(playerOnePosition == 99) {moveFromLadderAndSnake('P',4,99,'S');}
-
-                                case 5 :
-                                    if(playerOnePosition == 10) {moveFromLadderAndSnake('P',5,10,'L');}
-                                    else if(playerOnePosition == 19) {moveFromLadderAndSnake('P',5,19,'L');}
-                                    else if(playerOnePosition == 50) {moveFromLadderAndSnake('P',5,50,'L');}
-                                    else if(playerOnePosition == 78) {moveFromLadderAndSnake('P',5,78,'L');}
-                                    else if(playerOnePosition == 44) {moveFromLadderAndSnake('P',5,44,'S');} // SNAKE
-                                    else if(playerOnePosition == 64) {moveFromLadderAndSnake('P',5,64,'S');}
-                                    else if(playerOnePosition == 90) {moveFromLadderAndSnake('P',5,90,'S');}
-                                    else if(playerOnePosition == 99) {moveFromLadderAndSnake('P',5,99,'S');}
-
-                                case 6 :
-                                    if(playerOnePosition == 10) {moveFromLadderAndSnake('P',6,10,'L');}
-                                    else if(playerOnePosition == 19) {moveFromLadderAndSnake('P',6,19,'L');}
-                                    else if(playerOnePosition == 50) {moveFromLadderAndSnake('P',6,50,'L');}
-                                    else if(playerOnePosition == 78) {moveFromLadderAndSnake('P',6,78,'L');}
-                                    else if(playerOnePosition == 44) {moveFromLadderAndSnake('P',6,44,'S');} // SNAKE
-                                    else if(playerOnePosition == 64) {moveFromLadderAndSnake('P',6,64,'S');}
-                                    else if(playerOnePosition == 90) {moveFromLadderAndSnake('P',6,90,'S');}
-                                    else if(playerOnePosition == 99) {moveFromLadderAndSnake('P',6,99,'S');}
-
+                                case 10 :
+                                    moveFromLadderAndSnake('P',randomNumberForPlayerOne,playerOnePosition,'L');
+                                case 19 :
+                                    moveFromLadderAndSnake('P',randomNumberForPlayerOne,playerOnePosition,'L');
+                                case 50 :
+                                    moveFromLadderAndSnake('P',randomNumberForPlayerOne,playerOnePosition,'L');
+                                case 78 :
+                                    moveFromLadderAndSnake('P',randomNumberForPlayerOne,playerOnePosition,'L');
+                                case 44 :
+                                    moveFromLadderAndSnake('P',randomNumberForPlayerOne,playerOnePosition,'S');
+                                case 64 :
+                                    moveFromLadderAndSnake('P',randomNumberForPlayerOne,playerOnePosition,'S');
+                                case 90 :
+                                    moveFromLadderAndSnake('P',randomNumberForPlayerOne,playerOnePosition,'S');
+                                case 99 :
+                                    moveFromLadderAndSnake('P',randomNumberForPlayerOne,playerOnePosition,'S');
                             }// END OF SWTICH CASE FOR PLAYER ONE
                             cout << "Player Current Position : " << playerOnePosition << endl;
                         }
@@ -420,79 +377,39 @@ void gameFunction()
                 botPosition += randomNumberForBot;
                 cout << "Bot Current Position : " << botPosition << endl;
                 cout << "bot won" << endl;
-                cout << "Press any key to exit" << endl;
-                getch();
+                cout << "Press 'E' to exit" << endl;
+                char key;
+                while(1)
+                {
+                    key = getch();
+                    if(key == 'E' || key == 'e')
+                        break;
+                }
                 exit(0);
-                break;
             }
             else
             {
-
                 moveToNextNumber('B',randomNumberForBot, botPosition);
                 botPosition += randomNumberForBot;
 
-                switch(randomNumberForBot)
+                switch(botPosition)
                 {
-                    case 1 :
-                        if(botPosition == 10) {moveFromLadderAndSnake('B',1,10,'L');}
-                        else if(botPosition == 19) {moveFromLadderAndSnake('B',1,19,'L');}
-                        else if(botPosition == 50) {moveFromLadderAndSnake('B',1,50,'L');}
-                        else if(botPosition == 78) {moveFromLadderAndSnake('B',1,78,'L');}
-                        else if(botPosition == 44) {moveFromLadderAndSnake('B',1,44,'S');} // SNAKE
-                        else if(botPosition == 64) {moveFromLadderAndSnake('B',1,64,'S');}
-                        else if(botPosition == 90) {moveFromLadderAndSnake('B',1,90,'S');}
-                        else if(botPosition == 99) {moveFromLadderAndSnake('B',1,99,'S');}
-
-                    case 2 :
-                        if(botPosition == 10) {moveFromLadderAndSnake('B',2,10,'L');}
-                        else if(botPosition == 19) {moveFromLadderAndSnake('B',2,19,'L');}
-                        else if(botPosition == 50) {moveFromLadderAndSnake('B',2,50,'L');}
-                        else if(botPosition == 78) {moveFromLadderAndSnake('B',2,78,'L');}
-                        else if(botPosition == 44) {moveFromLadderAndSnake('B',2,44,'S');} // SNAKE
-                        else if(botPosition == 64) {moveFromLadderAndSnake('B',2,64,'S');}
-                        else if(botPosition == 90) {moveFromLadderAndSnake('B',2,90,'S');}
-                        else if(botPosition == 99) {moveFromLadderAndSnake('B',2,99,'S');}
-
-                    case 3 :
-                        if(botPosition == 10) {moveFromLadderAndSnake('B',3,10,'L');}
-                        else if(botPosition == 19) {moveFromLadderAndSnake('B',3,19,'L');}
-                        else if(botPosition == 50) {moveFromLadderAndSnake('B',3,50,'L');}
-                        else if(botPosition == 78) {moveFromLadderAndSnake('B',3,78,'L');}
-                        else if(botPosition == 44) {moveFromLadderAndSnake('B',3,44,'S');} // SNAKE
-                        else if(botPosition == 64) {moveFromLadderAndSnake('B',3,64,'S');}
-                        else if(botPosition == 90) {moveFromLadderAndSnake('B',3,90,'S');}
-                        else if(botPosition == 99) {moveFromLadderAndSnake('B',3,99,'S');}
-
-                    case 4 :
-                        if(botPosition == 10) {moveFromLadderAndSnake('B',4,10,'L');}
-                        else if(botPosition == 19) {moveFromLadderAndSnake('B',4,19,'L');}
-                        else if(botPosition == 50) {moveFromLadderAndSnake('B',4,50,'L');}
-                        else if(botPosition == 78) {moveFromLadderAndSnake('B',4,78,'L');}
-                        else if(botPosition == 44) {moveFromLadderAndSnake('B',4,44,'S');} // SNAKE
-                        else if(botPosition == 64) {moveFromLadderAndSnake('B',4,64,'S');}
-                        else if(botPosition == 90) {moveFromLadderAndSnake('B',4,90,'S');}
-                        else if(botPosition == 99) {moveFromLadderAndSnake('B',4,99,'S');}
-
-                    case 5 :
-                        if(botPosition == 10) {moveFromLadderAndSnake('B',5,10,'L');}
-                        else if(botPosition == 19) {moveFromLadderAndSnake('B',5,19,'L');}
-                        else if(botPosition == 50) {moveFromLadderAndSnake('B',5,50,'L');}
-                        else if(botPosition == 78) {moveFromLadderAndSnake('B',5,78,'L');}
-                        else if(botPosition == 44) {moveFromLadderAndSnake('B',5,44,'S');} // SNAKE
-                        else if(botPosition == 64) {moveFromLadderAndSnake('B',5,64,'S');}
-                        else if(botPosition == 90) {moveFromLadderAndSnake('B',5,90,'S');}
-                        else if(botPosition == 99) {moveFromLadderAndSnake('B',5,99,'S');}
-
-                    case 6 :
-                        if(botPosition == 10) {moveFromLadderAndSnake('B',6,10,'L');}
-                        else if(botPosition == 19) {moveFromLadderAndSnake('B',6,19,'L');}
-                        else if(botPosition == 50) {moveFromLadderAndSnake('B',6,50,'L');}
-                        else if(botPosition == 78) {moveFromLadderAndSnake('B',6,78,'L');}
-                        else if(botPosition == 44) {moveFromLadderAndSnake('B',6,44,'S');} // SNAKE
-                        else if(botPosition == 64) {moveFromLadderAndSnake('B',6,64,'S');}
-                        else if(botPosition == 90) {moveFromLadderAndSnake('B',6,90,'S');}
-                        else if(botPosition == 99) {moveFromLadderAndSnake('B',6,99,'S');}
-
+                    case 10 :
+                        moveFromLadderAndSnake('B',randomNumberForBot,botPosition,'L');
+                    case 19 :
+                        moveFromLadderAndSnake('B',randomNumberForBot,botPosition,'L');
+                    case 50 :
+                        moveFromLadderAndSnake('B',randomNumberForBot,botPosition,'L');
+                    case 78 :
+                        moveFromLadderAndSnake('B',randomNumberForBot,botPosition,'L');
+                    case 44 :
+                        moveFromLadderAndSnake('B',randomNumberForBot,botPosition,'S');
+                    case 64 :
+                        moveFromLadderAndSnake('B',randomNumberForBot,botPosition,'S');
+                    case 90 :
+                        moveFromLadderAndSnake('B',randomNumberForBot,botPosition,'S');
+                    case 99 :
+                        moveFromLadderAndSnake('B',randomNumberForBot,botPosition,'S');
                 }// END OF SWTICH CASE FOR BOT
                 cout << "Bot Current Position : " << botPosition << endl;
             }
