@@ -6,3 +6,4 @@ ppt
 instructions / end game
 update box
 update "Turn" status
+exit after game over
