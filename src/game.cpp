@@ -37,32 +37,44 @@ int main()
 {
 // Output Window set to full width
     initwindow(screenWidth+3, screenHeight+1, "",-6,-4);
+    int maxX = getmaxx();
+    int maxY = getmaxy();
+    int tWidth, tHeight;
 
     POINT CursorPosition;
     int cursorX, cursorY;
     int choice;
 
+    tWidth = textwidth("SNAKE AND LADDER");
+    tHeight = textheight("SNAKE AND LADDER");
+    tWidth = (maxX / 2) - (tWidth / 2);
+    tHeight = (int)(maxY / 4) + 50;
     setcolor(10);
-    bgiout << "SNAKE AND LADDER " << endl;
-    outstreamxy(535, 250);
+    outtextxy(tWidth, tHeight, "SNAKE AND LADDER");
 
     setcolor(9);
-    bgiout << "START" << endl;
-    outstreamxy(580,350);
-    setcolor(WHITE);
-    rectangle(570,340,630,375);
+    tWidth = textwidth("START");
+    tHeight = textheight("START");
+    tWidth = (maxX / 2) - (tWidth / 2);
+    tHeight = (maxY / 2) - 50;
+    outtextxy(tWidth, tHeight, "START");
 
-    setcolor(9);
-    bgiout << "INSTRUCTIONS" << endl;
-    outstreamxy(550,400);
-    setcolor(WHITE);
-    rectangle(540,390,660,425);
+    tWidth = textwidth("INSTRUCTIONS");
+    tHeight = textheight("INSTRUCTIONS");
+    tWidth = (maxX / 2) - (tWidth / 2);
+    tHeight = (maxY / 2);
+    outtextxy(tWidth, tHeight, "INSTRUCTIONS");
 
-    setcolor(9);
-    bgiout << "END GAME" << endl;
-    outstreamxy(565,450);
+    tWidth = textwidth("END GAME");
+    tHeight = textheight("END GAME");
+    tWidth = (maxX / 2) - (tWidth / 2);
+    tHeight = (maxY / 2) + 50;
+    outtextxy(tWidth, tHeight, "END GAME");
+
     setcolor(WHITE);
-    rectangle(550,440,650,475);
+    rectangle(610,300,670,335); // box for START GAME
+    rectangle(581,350,700,385); // box for INSTRUCTIONS
+    rectangle(595,400,685,435); //box for END GAME
 
     while(1)
     {
@@ -71,17 +83,17 @@ int main()
         GetCursorPos(&CursorPosition);
         if(GetAsyncKeyState(VK_LBUTTON))
         {
-            if(cursorX > 570 && cursorY > 340 && cursorX < 630 && cursorY < 375)
+            if(cursorX > 610 && cursorY > 300 && cursorX < 670 && cursorY < 335)
             {
                 choice = 1;
                 break;
             }
-            else if(cursorX > 540 && cursorY > 390 && cursorX < 660 && cursorY < 425)
+            else if(cursorX > 581 && cursorY > 350 && cursorX < 700 && cursorY < 385)
             {
                 choice = 2;
                 break;
             }
-            else if(cursorX > 550 && cursorY > 440 && cursorX < 650 && cursorY < 475)
+            else if(cursorX > 595 && cursorY > 400 && cursorX < 685 && cursorY < 435)
             {
                 choice = 3;
                 break;
