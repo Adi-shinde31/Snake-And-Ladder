@@ -24,6 +24,7 @@ void bot(int, int);
 int throwDice();
 void moveFromLadderAndSnake(char, int, int, char);
 void moveToNextNumber(char, int, int);
+void showUpdate(char, int, int);
 
 // Global Variable Declarations
 static int playerOnePosition = 1;
@@ -229,7 +230,7 @@ void startGame()
     outtextxy(940,230,"PLAYER'S TURN");
 
     //update box
-    rectangle(820, 312, 1180, 456);
+    rectangle(820, 312, 1180, 504);
 
     //throw dice box
     rectangle(900, 552, 1100, 602);
@@ -334,9 +335,11 @@ void gameFunction()
                         {
                             moveToNextNumber('P', randomNumberForPlayerOne, playerOnePosition);
                             playerOnePosition += randomNumberForPlayerOne;
-                            cout << "Player Current Position : " << playerOnePosition << endl;
-                            cout << "player won" << endl;
-                            cout << "Press 'E' to exit" << endl;
+
+                            bgiout << "Congratulations!!! Player Won..." <<endl << endl;
+                            bgiout << "Press 'E' to exit" << endl;
+                            outstreamxy(840,420);
+
                             char key;
                             while(1)
                             {
@@ -370,6 +373,8 @@ void gameFunction()
                                 case 99 :
                                     moveFromLadderAndSnake('P',randomNumberForPlayerOne,playerOnePosition,'S');
                             }// END OF SWTICH CASE FOR PLAYER ONE
+//                            playerOnePosition = 10;
+//                            showUpdate('P',randomNumberForPlayerOne,playerOnePosition);
                             cout << "Player Current Position : " << playerOnePosition << endl;
                         }
                     }
@@ -387,9 +392,11 @@ void gameFunction()
             {
                 moveToNextNumber('B',randomNumberForBot, botPosition);
                 botPosition += randomNumberForBot;
-                cout << "Bot Current Position : " << botPosition << endl;
-                cout << "bot won" << endl;
-                cout << "Press 'E' to exit" << endl;
+
+                bgiout << "Bot Won..." <<endl << endl;
+                bgiout << "Press 'E' to exit" << endl;
+                outstreamxy(840,420);
+
                 char key;
                 while(1)
                 {
@@ -403,6 +410,7 @@ void gameFunction()
             {
                 moveToNextNumber('B',randomNumberForBot, botPosition);
                 botPosition += randomNumberForBot;
+
 
                 switch(botPosition)
                 {
@@ -423,6 +431,7 @@ void gameFunction()
                     case 99 :
                         moveFromLadderAndSnake('B',randomNumberForBot,botPosition,'S');
                 }// END OF SWTICH CASE FOR BOT
+//                showUpdate('B',randomNumberForBot,botPosition);
                 cout << "Bot Current Position : " << botPosition << endl;
             }
         }// END OF ELSE ABOVE SWITCH CASE
@@ -458,6 +467,9 @@ int throwDice()
 
 void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)// P 6 18 L
 {
+    cleardevice();
+    startGame();
+
     // FOR LADDER
     if(obs == 'L')
     {
@@ -468,10 +480,7 @@ void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)/
                 playerOnePosition = 35;
                 playerOne_XCord = 400;
                 playerOne_YCord = 471;
-                cleardevice();
-                startGame();
-                playerOne(playerOne_XCord,playerOne_YCord);
-                bot(bot_XCord,bot_YCord);
+                showUpdate('P',numberOnDice,playerOnePosition);
             }
         }
         else if(ch == 'B' && obsNumber == 10) // for bot with any dice num but at LADDER 10
@@ -481,10 +490,8 @@ void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)/
                 botPosition = 35;
                 bot_XCord = 400;
                 bot_YCord = 493;
-                cleardevice();
-                startGame();
-                bot(bot_XCord,bot_YCord);
-                playerOne(playerOne_XCord,playerOne_YCord);
+                showUpdate('B',numberOnDice,botPosition);
+
             }
         }
         else if(ch == 'P' && obsNumber == 19) // for player with any dice num but at LADDER 19
@@ -494,10 +501,7 @@ void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)/
                 playerOnePosition = 74;
                 playerOne_XCord = 456;
                 playerOne_YCord = 275;
-                cleardevice();
-                startGame();
-                playerOne(playerOne_XCord,playerOne_YCord);
-                bot(bot_XCord,bot_YCord);
+                showUpdate('P',numberOnDice,playerOnePosition);
             }
         }
         else if(ch == 'B' && obsNumber == 19) // for bot with any dice num but at LADDER 19
@@ -507,10 +511,7 @@ void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)/
                 botPosition = 74;
                 bot_XCord = 456;
                 bot_YCord = 297;
-                cleardevice();
-                startGame();
-                bot(bot_XCord,bot_YCord);
-                playerOne(playerOne_XCord,playerOne_YCord);
+                showUpdate('B',numberOnDice,botPosition);
             }
         }
         else if(ch == 'P' && obsNumber == 50) // for player with any dice num but at LADDER 50
@@ -520,10 +521,7 @@ void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)/
                 playerOnePosition = 88;
                 playerOne_XCord = 512;
                 playerOne_YCord = 226;
-                cleardevice();
-                startGame();
-                playerOne(playerOne_XCord,playerOne_YCord);
-                bot(bot_XCord,bot_YCord);
+                showUpdate('P',numberOnDice,playerOnePosition);
             }
         }
         else if(ch == 'B' && obsNumber == 50) // for bot with any dice num but at LADDER 50
@@ -533,10 +531,7 @@ void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)/
                 botPosition = 88;
                 bot_XCord = 512;
                 bot_YCord = 248;
-                cleardevice();
-                startGame();
-                bot(bot_XCord,bot_YCord);
-                playerOne(playerOne_XCord,playerOne_YCord);
+                showUpdate('B',numberOnDice,botPosition);
             }
         }
         else if(ch == 'P' && obsNumber == 78) // for player with any dice num but at LADDER 78
@@ -546,10 +541,7 @@ void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)/
                 playerOnePosition = 95;
                 playerOne_XCord = 400;
                 playerOne_YCord = 177;
-                cleardevice();
-                startGame();
-                playerOne(playerOne_XCord,playerOne_YCord);
-                bot(bot_XCord,bot_YCord);
+                showUpdate('P',numberOnDice,playerOnePosition);
             }
         }
         else if(ch == 'B' && obsNumber == 78) // for bot with any dice num but at LADDER 78
@@ -559,10 +551,7 @@ void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)/
                 botPosition = 95;
                 bot_XCord = 400;
                 bot_YCord = 199;
-                cleardevice();
-                startGame();
-                bot(bot_XCord,bot_YCord);
-                playerOne(playerOne_XCord,playerOne_YCord);
+                showUpdate('B',numberOnDice,botPosition);
             }
         }
     }
@@ -576,10 +565,7 @@ void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)/
                 playerOnePosition = 6;
                 playerOne_XCord = 400;
                 playerOne_YCord = 618;
-                cleardevice();
-                startGame();
-                playerOne(playerOne_XCord,playerOne_YCord);
-                bot(bot_XCord,bot_YCord);
+                showUpdate('P',numberOnDice,playerOnePosition);
             }
         }
         else if(ch == 'B' && obsNumber == 44) // for bot with any dice num but at SNAKE 44
@@ -589,10 +575,7 @@ void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)/
                 botPosition = 6;
                 bot_XCord = 400;
                 bot_YCord = 640;
-                cleardevice();
-                startGame();
-                bot(bot_XCord,bot_YCord);
-                playerOne(playerOne_XCord,playerOne_YCord);
+                showUpdate('B',numberOnDice,botPosition);
             }
         }
         else if(ch == 'P' && obsNumber == 64) // for player with any dice num but at SNAKE 64
@@ -602,10 +585,7 @@ void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)/
                 playerOnePosition = 40;
                 playerOne_XCord = 120;
                 playerOne_YCord = 471;
-                cleardevice();
-                startGame();
-                playerOne(playerOne_XCord,playerOne_YCord);
-                bot(bot_XCord,bot_YCord);
+                showUpdate('P',numberOnDice,playerOnePosition);
             }
         }
         else if(ch == 'B' && obsNumber == 64) // for bot with any dice num but at SNAKE 64
@@ -615,10 +595,7 @@ void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)/
                 botPosition = 40;
                 bot_XCord = 120;
                 bot_YCord = 493;
-                cleardevice();
-                startGame();
-                bot(bot_XCord,bot_YCord);
-                playerOne(playerOne_XCord,playerOne_YCord);
+                showUpdate('B',numberOnDice,botPosition);
             }
         }
         else if(ch == 'P' && obsNumber == 90) // for player with any dice num but at SNAKE 90
@@ -628,10 +605,7 @@ void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)/
                 playerOnePosition = 53;
                 playerOne_XCord = 512;
                 playerOne_YCord = 373;
-                cleardevice();
-                startGame();
-                playerOne(playerOne_XCord,playerOne_YCord);
-                bot(bot_XCord,bot_YCord);
+                showUpdate('P',numberOnDice,playerOnePosition);
             }
         }
         else if(ch == 'B' && obsNumber == 90) // for bot with any dice num but at SNAKE 90
@@ -641,10 +615,7 @@ void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)/
                 botPosition = 53;
                 bot_XCord = 512;
                 bot_YCord = 395;
-                cleardevice();
-                startGame();
-                bot(bot_XCord,bot_YCord);
-                playerOne(playerOne_XCord,playerOne_YCord);
+                showUpdate('B',numberOnDice,botPosition);
             }
         }
         else if(ch == 'P' && obsNumber == 99) // for player with any dice num but at SNAKE 99
@@ -654,10 +625,7 @@ void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)/
                 playerOnePosition = 28;
                 playerOne_XCord = 512;
                 playerOne_YCord = 520;
-                cleardevice();
-                startGame();
-                playerOne(playerOne_XCord,playerOne_YCord);
-                bot(bot_XCord,bot_YCord);
+                showUpdate('P',numberOnDice,playerOnePosition);
             }
         }
         else if(ch == 'B' && obsNumber == 99) // for bot with any dice num but at SNAKE 99
@@ -667,21 +635,20 @@ void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)/
                 botPosition = 28;
                 bot_XCord = 512;
                 bot_YCord = 542;
-                cleardevice();
-                startGame();
-                bot(bot_XCord,bot_YCord);
-                playerOne(playerOne_XCord,playerOne_YCord);
+                showUpdate('B',numberOnDice,botPosition);
             }
         }
     }
+    playerOne(playerOne_XCord,playerOne_YCord);
+    bot(bot_XCord,bot_YCord);
 }// END OF moveFromLadderOrLadder()
 
-void moveToNextNumber(char dine, int numberAtDice, int position)
+void moveToNextNumber(char dine, int numberAtDice, int position)// 2 15
 {
     //player
     if(dine == 'P')
     {
-        int reach = numberAtDice+position;
+        int reach = numberAtDice+position; // 17
         while(position != reach)
         {
             if((playerOne_XCord < 623 && (playerOne_YCord == 618 || playerOne_YCord == 520 || playerOne_YCord == 422 || playerOne_YCord == 324|| playerOne_YCord == 226 || playerOne_YCord == 128)))// FOR X COORDINATE
@@ -693,6 +660,7 @@ void moveToNextNumber(char dine, int numberAtDice, int position)
                     startGame();
                     playerOne(playerOne_XCord,playerOne_YCord);
                     bot(bot_XCord,bot_YCord);
+                    showUpdate('P',numberAtDice,reach);
                     delay(20);
                 }
                 position++;
@@ -701,11 +669,12 @@ void moveToNextNumber(char dine, int numberAtDice, int position)
             {
                 for(int i = 1; i <= ONE_Y; i++)
                 {
+                    playerOne_YCord -= 1;
                     cleardevice();
                     startGame();
-                    playerOne_YCord -= 1;
                     playerOne(playerOne_XCord,playerOne_YCord);
                     bot(bot_XCord,bot_YCord);
+                    showUpdate('P',numberAtDice,reach);
                     delay(20);
                 }
                 position++;
@@ -714,11 +683,12 @@ void moveToNextNumber(char dine, int numberAtDice, int position)
             {
                 for(int i = 1; i <= ONE; i++)
                 {
+                    playerOne_XCord -= 1;
                     cleardevice();
                     startGame();
-                    playerOne_XCord -= 1;
                     playerOne(playerOne_XCord,playerOne_YCord);
                     bot(bot_XCord,bot_YCord);
+                    showUpdate('P',numberAtDice,reach);
                     delay(20);
                 }
                 position++;
@@ -727,11 +697,12 @@ void moveToNextNumber(char dine, int numberAtDice, int position)
             {
                 for(int i = 1; i <= ONE_Y; i++)
                 {
+                    playerOne_YCord -= 1;
                     cleardevice();
                     startGame();
-                    playerOne_YCord -= 1;
                     playerOne(playerOne_XCord,playerOne_YCord);
                     bot(bot_XCord,bot_YCord);
+                    showUpdate('P',numberAtDice,reach);
                     delay(20);
                 }
                 position++;
@@ -748,11 +719,12 @@ void moveToNextNumber(char dine, int numberAtDice, int position)
             {
                 for(int i = 1; i <= ONE; i++)
                 {
+                    bot_XCord += 1;
                     cleardevice();
                     startGame();
-                    bot_XCord += 1;
                     bot(bot_XCord,bot_YCord);
                     playerOne(playerOne_XCord,playerOne_YCord);
+                    showUpdate('B',numberAtDice,reach);
                     delay(20);
                 }
                 position++;
@@ -761,11 +733,12 @@ void moveToNextNumber(char dine, int numberAtDice, int position)
             {
                 for(int i = 1; i <= ONE_Y; i++)
                 {
+                    bot_YCord -= 1;
                     cleardevice();
                     startGame();
-                    bot_YCord -= 1;
                     bot(bot_XCord,bot_YCord);
                     playerOne(playerOne_XCord,playerOne_YCord);
+                    showUpdate('B',numberAtDice,reach);
                     delay(20);
                 }
                 position++;
@@ -774,11 +747,12 @@ void moveToNextNumber(char dine, int numberAtDice, int position)
             {
                 for(int i = 1; i <= ONE; i++)
                 {
+                    bot_XCord -= 1;
                     cleardevice();
                     startGame();
-                    bot_XCord -= 1;
                     bot(bot_XCord,bot_YCord);
                     playerOne(playerOne_XCord,playerOne_YCord);
+                    showUpdate('B',numberAtDice,reach);
                     delay(20);
                 }
                 position++;
@@ -787,11 +761,12 @@ void moveToNextNumber(char dine, int numberAtDice, int position)
             {
                 for(int i = 1; i <= ONE_Y; i++)
                 {
+                    bot_YCord -= 1;
                     cleardevice();
                     startGame();
-                    bot_YCord -= 1;
                     bot(bot_XCord,bot_YCord);
                     playerOne(playerOne_XCord,playerOne_YCord);
+                    showUpdate('B',numberAtDice,reach);
                     delay(20);
                 }
                 position++;
@@ -799,3 +774,53 @@ void moveToNextNumber(char dine, int numberAtDice, int position)
         }// END OF while loop
     }// END OF else if
 }// END OF moveToNextNumber FUNCTION
+
+void showUpdate(char ch, int randomNumber, int Position)// 4 12 position = reach
+{
+    bgiout << "After Rolling Dice.....\n\n";
+    bgiout << "Number on Dice : ";
+    outstreamxy(840,325);
+
+    if(ch == 'P')
+    {
+        bgiout << setw(2) << setfill('0') << randomNumber;
+        outstreamxy(960,357);
+        bgiout << "\n\nPlayer Position is : " << setw(2) << setfill('0') << Position << endl << endl;
+        outstreamxy(840,357);
+
+        if(Position == 10 || Position == 19 || Position == 50 || Position == 78)
+        {
+            bgiout << "Hurry!! You reached on a ladder" << endl;
+            outstreamxy(840,420);
+        }
+        else if(Position == 44 || Position == 64 || Position == 90 || Position == 99)
+        {
+            bgiout << "Oops!! You got bitten by a Snake" << endl;
+            outstreamxy(840,420);
+        }
+    }
+    else if(ch == 'B')
+    {
+        bgiout << setw(2) << setfill('0') << randomNumber;
+        outstreamxy(960,357);
+        bgiout << "\n\nBot Position is : " << setw(2) << setfill('0') << Position << endl << endl;
+        outstreamxy(840,357);
+        if(Position == 10 || Position == 19 || Position == 50 || Position == 78)
+        {
+            bgiout << "Bot reached on a ladder" << endl;
+            outstreamxy(840,420);
+        }
+        else if(Position == 44 || Position == 64 || Position == 90 || Position == 99)
+        {
+            bgiout << "Bot got bitten by a Snake" << endl;
+            outstreamxy(840,420);
+        }
+    }
+}
+
+
+
+
+// BOT UPDATE GET CLEAR AFTER REACHING END OF LADDER AT LINE 473
+// PAUSE SCREEN AFTER PLAYER TURNS GET OVER
+// STATUS BAR
