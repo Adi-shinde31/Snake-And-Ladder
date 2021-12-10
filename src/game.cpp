@@ -245,7 +245,7 @@ void instructions()
 {
     POINT CursorPosition;
     int cursorX, cursorY;
-    int opt = 0 ;
+
     setlinestyle(0,0,3);
 
     //enter game
@@ -259,6 +259,32 @@ void instructions()
 
     setlinestyle(0,0,1);
 
+    int tWidth = textwidth("INSTRUCTIONS");
+
+    bgiout << "INSTRUCTIONS" << endl << endl << endl;
+    outstreamxy((getmaxwidth()/2)-(tWidth/2), 120);
+
+    bgiout << "This game is played between a player & computer." << endl << endl;
+    bgiout << "To play game -> Click on 'START'." << endl << endl;
+    bgiout << "STATUS BOX displays whose turn it is to play." << endl << endl;
+    bgiout << "Click on 'Throw Dice' to roll the die and move."<< endl << endl;
+    bgiout << "If players lands at the bottom of a ladder, then the players will move up to the top of the ladder." << endl;
+    bgiout << "Ladders in the game are from : " << endl;
+    bgiout << "\t10 to 35" << endl;
+    bgiout << "\t19 to 74" << endl;
+    bgiout << "\t50 to 88" << endl;
+    bgiout << "\t78 to 95" << endl << endl;
+    bgiout << "If players lands on the head of a snake, then the players will slide down to the bottom of the snake." << endl;
+    bgiout << "Snakes in the game board are from :" << endl;
+    bgiout << "\t44 to 06" << endl;
+    bgiout << "\t64 to 40" << endl;
+    bgiout << "\t90 to 53" << endl;
+    bgiout << "\t99 to 28" << endl << endl;
+    bgiout << "UPDATE BOX displays the number on dice and position of the players after every turn." << endl << endl;
+    bgiout << "To end game click -> 'QUIT'." << endl << endl;
+    bgiout << "Thank you!!" << endl << endl;
+    outstreamxy(170, 190);
+
     while(1)
     {
         cursorX = CursorPosition.x;
@@ -268,65 +294,35 @@ void instructions()
         {
             if(cursorX > 120 && cursorY > 30 && cursorX < 220 && cursorY < 672)
             {
-                opt = 1;
+                cleardevice();
+                endGame();
                 break;
             }
             else if(cursorX > 1120 && cursorY > 30 && cursorX < 1220 && cursorY < 92)
             {
-                opt = 2;
+                cleardevice();
+                startGame();
+                playerOne(playerOne_XCord, playerOne_YCord);
+                bot(bot_XCord, bot_YCord);
+                gameFunction();
                 break;
             }
         }
-    }
-
-    bgiout << "INSTRUCTIONS" << endl << endl << endl;
-    outstreamxy(600, 60);
-
-    bgiout << "This game is played between one player & computer." << endl << endl;
-    bgiout << "To play game -> click on start." << endl << endl;
-    bgiout << "STATUS BOX displays whose turn it is to play." << endl << endl;
-    bgiout << "Click on Throw Dice to roll the die and move."<< endl << endl;
-    bgiout << "If player lands at the bottom of a ladder, you can move up to the top of the ladder." << endl;
-    bgiout << "Ladders on the game board are:" << endl;
-    bgiout << " 10 to 35" << endl;
-    bgiout << " 19 to 74" << endl;
-    bgiout << " 50 to 88" << endl;
-    bgiout << " 78 to 95" << endl << endl;
-    bgiout << "If player lands on the head of a snake, you must slide down to the bottom of the snake." << endl;
-    bgiout << "Snakes on the game board are:" << endl;
-    bgiout << " 44 to 06" << endl;
-    bgiout << " 64 to 40" << endl;
-    bgiout << " 90 to 53" << endl;
-    bgiout << " 99 to 28" << endl << endl;
-    bgiout << "UPDATE BOX displayes the number on dice and position of the player." << endl << endl;
-    bgiout << "To end game click -> quit." << endl << endl;
-    bgiout << "Thank you!!" << endl << endl;
-
-    outstreamxy(170, 180);
-    getch();
-
-    if(opt == 1)
-    {
-        cleardevice();
-        endGame();
-    }
-    else if(opt == 2)
-    {
-        cleardevice();
-        startGame();
-        playerOne(playerOne_XCord, playerOne_YCord);
-        bot(bot_XCord, bot_YCord);
-        gameFunction();
-        getch();
     }
 }// END OF instructions()
 
 
 void endGame()
 {
-    bgiout << "You Ended the Game!!" << endl;
-    bgiout << "Press any key to exit." << endl;
-    outstreamxy(120, 200);
+    int tWidth = textwidth("QUIT");
+
+    bgiout << "QUIT" << endl << endl << endl;
+    outstreamxy((getmaxwidth()/2)-(tWidth/2), 120);
+
+    bgiout << "You Ended the Game!!" << endl << endl;
+    bgiout << "Press any key to exit." << endl << endl;
+    bgiout << "Thanks for playing :)" << endl;
+    outstreamxy(120, 250);
     getch();
     exit(0);
 }// END OF endGame()
@@ -809,7 +805,7 @@ void showUpdate(char ch, int randomNumber, int Position)
         outstreamxy(960,357);
         bgiout << "\n\nBot Position is : " << setw(2) << setfill('0') << Position << endl << endl;
         outstreamxy(840,357);
-        cout << "position : " << Position << endl;
+
         if(Position == 10 || Position == 19 || Position == 50 || Position == 78)
         {
             bgiout << "Bot reached on a ladder" << endl;
@@ -822,5 +818,3 @@ void showUpdate(char ch, int randomNumber, int Position)
         }
     }
 }
-
-// PAUSE SCREEN AFTER PLAYER TURNS GET OVER
