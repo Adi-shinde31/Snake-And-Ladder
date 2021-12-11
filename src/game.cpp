@@ -1,4 +1,4 @@
-// All required files are included
+// All required header files
 #include <iostream>
 #include <conio.h>
 #include <stdlib.h>
@@ -8,13 +8,13 @@
 
 using namespace std;
 
-// initialize any constant here if you want
+// initialized constant
 #define screenWidth GetSystemMetrics(SM_CXSCREEN)
 #define screenHeight GetSystemMetrics(SM_CYSCREEN)
 #define ONE 56
 #define ONE_Y 49
 
-// Declare Functions here
+// Declared Functions
 void startGame();
 void instructions();
 void endGame();
@@ -26,7 +26,7 @@ void moveFromLadderAndSnake(char, int, int, char);
 void moveToNextNumber(char, int, int);
 void showUpdate(char, int, int);
 
-// Global Variable Declarations
+// Declared static Variables
 static int playerOnePosition = 1;
 static int botPosition = 1;
 static int playerOne_XCord = 120;
@@ -34,18 +34,28 @@ static int playerOne_YCord = 618;
 static int bot_XCord = 120;
 static int bot_YCord = 640;
 
+// START OF main() FUNCTION
 int main()
 {
-// Output Window set to full width
+/*  initwindow will create a graphic window and required parameter
+ *  helps to set its maximum width and height
+ */
     initwindow(screenWidth+3, screenHeight+1, "",-6,-4);
-    int maxX = getmaxx();
-    int maxY = getmaxy();
-    int tWidth, tHeight;
 
+    int maxX = getmaxx(); /* stores maximum windows width */
+    int maxY = getmaxy(); /* stores maximum windows height */
+    int tWidth, tHeight; /* */
+
+/*  CursorPosition is a object of POINT which will help to apply
+ *  onclick event when user click on the following options
+ */
     POINT CursorPosition;
     int cursorX, cursorY;
-    int choice;
+    int choice; /* sets to a relative number when user click on anyone of the option*/
 
+/*  tWidth & tHeight will store the width and length of particular text,
+ *  and displays the text at proper place
+ */
     tWidth = textwidth("SNAKE AND LADDER");
     tHeight = textheight("SNAKE AND LADDER");
     tWidth = (maxX / 2) - (tWidth / 2);
@@ -72,16 +82,23 @@ int main()
     tHeight = (maxY / 2) + 50;
     outtextxy(tWidth, tHeight, "END GAME");
 
+/*  Creates 3 rectangle respectively for the above text output
+ *  I have set them at the center of the screen with respect to its X axis
+ */
     setcolor(WHITE);
-    rectangle(((maxX/2)-30),((maxY/2)-60),((maxX/2)+30),((maxY/2)-25));// box for START GAME
-    rectangle(((maxX/2)-60),((maxY/2)-10),((maxX/2)+60),((maxY/2)+25));// box for INSTRUCTIONS
-    rectangle(((maxX/2)-45),((maxY/2)+40),((maxX/2)+45),((maxY/2)+75));// box for END GAME
+    rectangle(((maxX/2)-30),((maxY/2)-60),((maxX/2)+30),((maxY/2)-25)); /* box for START GAME */
+    rectangle(((maxX/2)-60),((maxY/2)-10),((maxX/2)+60),((maxY/2)+25)); /* box for INSTRUCTIONS */
+    rectangle(((maxX/2)-45),((maxY/2)+40),((maxX/2)+45),((maxY/2)+75)); /* box for END GAME */
 
     while(1)
     {
         cursorX = CursorPosition.x;
         cursorY = CursorPosition.y;
         GetCursorPos(&CursorPosition);
+
+/*  if user clicks in between any of the coordinates, choice will get assigned to it's respective value
+ *  this while will keep on running untill the user clicks on any of the options
+ */
         if(GetAsyncKeyState(VK_LBUTTON))
         {
             if(cursorX > ((maxX/2)-30) && cursorY > ((maxY/2)-60) && cursorX < ((maxX/2)+30) && cursorY < ((maxY/2)-25))
@@ -104,6 +121,9 @@ int main()
 
     cleardevice();
 
+/*  Based on the choice screen will get clear and switch case statements will start
+ *  getting executed.
+ */
     switch (choice)
     {
         case 1 :
@@ -111,7 +131,6 @@ int main()
             playerOne(playerOne_XCord, playerOne_YCord);
             bot(bot_XCord, bot_YCord);
             gameFunction();
-            getch();
             break;
 
         case 2 :
@@ -120,24 +139,29 @@ int main()
 
         case 3 :
             endGame();
-            closegraph();
-            return 0;
+            break;
     }
-}
+} // END OF main() FUNCTION
 
+// START OF startGame() FUNCTION
 void startGame()
 {
     setcolor(WHITE);
     int i = 100;
     int reverseLine = 1;
 
+/*  This while loop will print all the values from 100 to 1
+ *  the if part will print the odd values and the else part
+ *  will print the even values.
+ *  Kept some space before printing number and set the vacant space to '0'
+ */
     while(i >= 10)
     {
-        if(reverseLine % 2 != 0) // odd
+        if(reverseLine % 2 != 0)
         {
             for(int num = 1; num <= 10; num++)
             {
-                bgiout<<"          "<< setw(2) << setfill('0') << i ;
+                bgiout << "          " << setw(2) << setfill('0') << i ;
                 i--;
             }
         }
@@ -145,7 +169,7 @@ void startGame()
         {
             for(int num = -9; num <= 9; num++) // even
             {
-                bgiout<<"          "<< setw(2) << setfill('0') << i+num;
+                bgiout << "          " << setw(2) << setfill('0') << i+num;
                 i--;
                 num++;
             }
@@ -155,7 +179,7 @@ void startGame()
     }
     outstreamxy(95, 200);
 
-    // vertical outline and inline from left to right
+//  vertical outlines and inlines from LEFT to RIGHT
     line(106,167,106,652);
     line(162,167,162,652);
     line(216,167,216,652);
@@ -168,7 +192,7 @@ void startGame()
     line(609,167,609,652);
     line(668,167,668,652);
 
-    // horizontal outline and inline from down to up
+//  horizontal outlines and inlines from DOWN to UP
     line(106,652,668,652);
     line(106,602,668,602);
     line(106,552,668,552);
@@ -181,86 +205,90 @@ void startGame()
     line(106,215,668,215);
     line(106,167,668,167);
 
-    setlinestyle(0,0,3);
-    // Created ladders here
+    setlinestyle(0,0,3); /* increases thickness by 3px*/
+
+//  Created ladders here
     setcolor(GREEN);
-    line(252,295,420,195);//95
-    line(535,240,645,433);//88
-    line(185,583,466,292);//19
-    line(422,485,635,630);//35
+    line(252,295,420,195); //95
+    line(535,240,645,433); //88
+    line(185,583,466,292); //19
+    line(422,485,635,630); //35
 
-    // Created Snakes here
+//  Created Snakes here
     setcolor(RED);
-    line(186,200,533,531);//32
-    line(295,340,128,480);//64
-    line(408,623,292,436);//06
-    line(532,382,636,236);//53
+    line(186,200,533,531); //32
+    line(295,340,128,480); //64
+    line(408,623,292,436); //06
+    line(532,382,636,236); //53
 
-    setlinestyle(0,0,3);
+//  PLAYER details
     setcolor(WHITE);
-    //player details
+    outtextxy(870, 157, "-  PLAYER");
     circle(855, 165, 7);
     setfillstyle(SOLID_FILL,BLUE);
     floodfill(855, 165, 15);
-    outtextxy(870, 157, "-  PLAYER");
 
-    //BOT DETAILS
-    setlinestyle(0,0,3);
+//  BOT details
+    setcolor(WHITE);
+    outtextxy(870, 182, "-  BOT ");
     circle(855, 190, 7);
     setfillstyle(SOLID_FILL,MAGENTA);
     floodfill(855, 190, 15);
-    outtextxy(870, 182, "-  BOT ");
 
-    //LADDER details
+//  LADDER details
     setcolor(GREEN);
     line(1105,165,1120,165);
 
-    //SNAKE details
+//  SNAKE details
     setcolor(RED);
     line(1105,190,1120,190);
 
     setcolor(WHITE);
+//  the below text will be displayed above the turn denoter
     outtextxy(1130, 157, "-  LADDERS");
     outtextxy(1130, 182, "-  SNAKES");
 
-    //turn denoter
+//  TURN denoter
     rectangle(870, 215, 1130, 263);
 
-    //update box
+//  UPDATE box
     rectangle(820, 312, 1180, 504);
 
-    //throw dice box
+//  THROW DICE box
     rectangle(900, 552, 1100, 602);
     outtextxy(950,570,"THROW DICE");
 
-    //quit game
+//  QUIT game
     rectangle(1120, 30, 1220, 92);
     outtextxy(1130,55,"      QUIT ");
 
-    setlinestyle(0,0,1);
+    setlinestyle(0,0,1); /* set thickness to it's default i.e. 1px*/
 
-}// END OF startGame()
+}// END OF startGame() FUNCTION
 
+// START OF instructions() FUNCTION
 void instructions()
 {
     POINT CursorPosition;
     int cursorX, cursorY;
 
-    setlinestyle(0,0,3);
+    setlinestyle(0,0,3); /* increases thickness by 3px*/
 
-    //enter game
+//  Enter game option at top right corner
     setcolor(WHITE);
     rectangle(1120, 30, 1220, 92);
     outtextxy(1128,55,"START GAME");
 
-    //quit
+//  Quit game option at top left corner
     rectangle(120, 30, 220, 92);
     outtextxy(130,55,"      QUIT ");
 
-    setlinestyle(0,0,1);
+    setlinestyle(0,0,1); /* set thickness to it's default i.e. 1px*/
 
+/*  store the width of INSTRUCTIONS and place it to the particular positon
+ *  also written set of instructions about the game.
+ */
     int tWidth = textwidth("INSTRUCTIONS");
-
     bgiout << "INSTRUCTIONS" << endl << endl << endl;
     outstreamxy((getmaxwidth()/2)-(tWidth/2), 120);
 
@@ -270,21 +298,24 @@ void instructions()
     bgiout << "Click on 'Throw Dice' to roll the die and move."<< endl << endl;
     bgiout << "If players lands at the bottom of a ladder, then the players will move up to the top of the ladder." << endl;
     bgiout << "Ladders in the game are from : " << endl;
-    bgiout << "\t10 to 35" << endl;
-    bgiout << "\t19 to 74" << endl;
-    bgiout << "\t50 to 88" << endl;
-    bgiout << "\t78 to 95" << endl << endl;
+    bgiout << "10 to 35" << endl;
+    bgiout << "19 to 74" << endl;
+    bgiout << "50 to 88" << endl;
+    bgiout << "78 to 95" << endl << endl;
     bgiout << "If players lands on the head of a snake, then the players will slide down to the bottom of the snake." << endl;
     bgiout << "Snakes in the game board are from :" << endl;
-    bgiout << "\t44 to 06" << endl;
-    bgiout << "\t64 to 40" << endl;
-    bgiout << "\t90 to 53" << endl;
-    bgiout << "\t99 to 28" << endl << endl;
+    bgiout << "44 to 06" << endl;
+    bgiout << "64 to 40" << endl;
+    bgiout << "90 to 53" << endl;
+    bgiout << "99 to 28" << endl << endl;
     bgiout << "UPDATE BOX displays the number on dice and position of the players after every turn." << endl << endl;
     bgiout << "To end game click -> 'QUIT'." << endl << endl;
     bgiout << "Thank you!!" << endl << endl;
     outstreamxy(170, 190);
 
+/*  this loop will run untill the user either clicks on START GAME
+ *  or QUIT GAME button
+ */
     while(1)
     {
         cursorX = CursorPosition.x;
@@ -309,13 +340,15 @@ void instructions()
             }
         }
     }
-}// END OF instructions()
+}// END OF instructions() FUNCTION
 
-
+// START OF endgame() FUNCTION
 void endGame()
 {
+/*  store the width of QUIT and place it to the particular positon
+ *  also written set of instructions about the game.
+ */
     int tWidth = textwidth("QUIT");
-
     bgiout << "QUIT" << endl << endl << endl;
     outstreamxy((getmaxwidth()/2)-(tWidth/2), 120);
 
@@ -324,9 +357,11 @@ void endGame()
     bgiout << "Thanks for playing :)" << endl;
     outstreamxy(120, 250);
     getch();
+    closegraph(); /* closed the graph here */
     exit(0);
-}// END OF endGame()
+}// END OF endGame() FUNCTION
 
+// START OF gameFunction() FUNCTION
 void gameFunction()
 {
     POINT CursorPosition;
@@ -335,14 +370,14 @@ void gameFunction()
     int randomNumberForPlayerOne;
     int randomNumberForBot;
 
-    cout << "* Player position at start : " << playerOnePosition << endl;
-    cout << "* Bot position at start : " << botPosition << endl;
-
-
-
+/*  This loop will run untill player or bot reaches 100
+ */
     while (playerOnePosition != 100 || botPosition != 100)
     {
-        outtextxy(940,230,"PLAYER'S TURN");
+        outtextxy(940,230,"PLAYER'S TURN"); /* Shows player's turn everytime after bot's turn gets over*/
+
+/*  This loop will run untill the USER will click on throw dice button
+ */
         while(1)
         {
             cursorX = CursorPosition.x;
@@ -352,20 +387,28 @@ void gameFunction()
             {
                 if(cursorX > 900 && cursorY > 552 && cursorX < 1100 && cursorY < 602)
                 {
+/*  Accepts a random number for player and check in which condition it is true
+ *  The 'if' part is for number greater than 100 which will never be true
+ *  'else if' part will get true only if sum of player's position and dice is
+ *  less than or equal to 100
+ */
                     randomNumberForPlayerOne = throwDice();
-                    cout << "\n-> Random Number for PlayerOne : " << randomNumberForPlayerOne << endl;
-                    if(randomNumberForPlayerOne + playerOnePosition > 100){} // FOR number greater than 100(will never be true)
-                    else if(randomNumberForPlayerOne + playerOnePosition <= 100) // num is less than 100
+                    if(randomNumberForPlayerOne + playerOnePosition > 100){}
+                    else if(randomNumberForPlayerOne + playerOnePosition <= 100)
                     {
                         if(randomNumberForPlayerOne + playerOnePosition == 100) // WHEN dice is thrown and requireed num to win comes
                         {
+/*  moveToNextNumber function will run untill the player reaches a new position
+ *  then the position will get added with the dice number
+ */
                             moveToNextNumber('P', randomNumberForPlayerOne, playerOnePosition);
                             playerOnePosition += randomNumberForPlayerOne;
 
                             bgiout << "Congratulations!!! Player Won..." <<endl << endl;
                             bgiout << "Press 'E' to exit" << endl;
                             outstreamxy(840,420);
-
+/*  This loop will run untill the user presses on 'E' to exit the game
+ */
                             char key;
                             while(1)
                             {
@@ -407,11 +450,12 @@ void gameFunction()
                                     moveFromLadderAndSnake('P',randomNumberForPlayerOne,playerOnePosition,'S');
                                     break;
                             }// END OF SWTICH CASE FOR PLAYER ONE
-                            cout << "Player Current Position : " << playerOnePosition << endl;
                         }
                     }
                     break;
                 }
+/*  Quit button if user wants to end the game in between playing
+ */
                 else if(cursorX > 1120 && cursorY > 30 && cursorX < 1220 && cursorY < 92)
                 {
                     cleardevice();
@@ -424,7 +468,6 @@ void gameFunction()
         Sleep(2 * 1000);
 
         randomNumberForBot = throwDice();
-        cout << "\n-> Random Number for Bot : " << randomNumberForBot << endl;
         if(randomNumberForBot + botPosition > 100){}
         else if(randomNumberForBot + botPosition <= 100)
         {
@@ -478,12 +521,12 @@ void gameFunction()
                         moveFromLadderAndSnake('B',randomNumberForBot,botPosition,'S');
                         break;
                 }// END OF SWTICH CASE FOR BOT
-                cout << "Bot Current Position : " << botPosition << endl;
             }
         }// END OF ELSE ABOVE SWITCH CASE
     }// END OF WHILE LOOP
 }// END OF gameFunction()
 
+// structure for player
 void playerOne(int X_cord, int Y_cord)
 {
     setlinestyle(0,0,3);
@@ -494,6 +537,7 @@ void playerOne(int X_cord, int Y_cord)
     setlinestyle(0,0,1);
 }// END OF playerOne()
 
+// structure for bot
 void bot(int X_cord, int Y_cord)
 {
     setlinestyle(0,0,3);
@@ -504,6 +548,8 @@ void bot(int X_cord, int Y_cord)
     setlinestyle(0,0,1);
 }// END OF bot()
 
+/* This function will return a random number everytime user or bot rolls a dice
+ */
 int throwDice()
 {
     srand(time(0));
@@ -511,10 +557,12 @@ int throwDice()
     return dice;
 }// END OF throwDice()
 
-
+/*  if player or ladder or snake this function will get called and values will get updated repectively
+ *  1st 8 if - else if are for player and remaining 8 are for bot
+ */
 void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)
 {
-    if(ch == 'P' )
+    if(ch == 'P')
     {
         cleardevice();
         startGame();
@@ -637,7 +685,12 @@ void moveFromLadderAndSnake(char ch, int numberOnDice, int obsNumber, char obs)
     }
 } // END OF moveFromLadderOrLadder()
 
-
+/*  This function give direction to the player or bot accordingly rhe dice and new position they get
+ *  1st if is for MOVE RIGHT at const Y and X keeps on icreasing
+ *  1st else if is for MOVE UP at MAX X axis and const Y axiz
+ *  2nd else if is for MOVE LEFT at const Y and X keeps on decreasing
+ *  3rd else if is for MOVE UP but at MIN X and const Y axis
+ */
 void moveToNextNumber(char dine, int numberAtDice, int position)
 {
     //player
@@ -770,6 +823,12 @@ void moveToNextNumber(char dine, int numberAtDice, int position)
     }// END OF else if
 }// END OF moveToNextNumber FUNCTION
 
+/*  This function will display the updates of both the players
+ *  Untill Player reaches it new position this function will keep showing update for player
+ *  and then it will show bots update untill bot reaches its new position
+ *  If player or bot land or ladder or snake it will print a particular statement
+ */
+
 void showUpdate(char ch, int randomNumber, int Position)
 {
     bgiout << "After Rolling Dice.....\n\n";
@@ -778,7 +837,6 @@ void showUpdate(char ch, int randomNumber, int Position)
 
     if(ch == 'P')
     {
-
         outtextxy(940,230,"PLAYER'S TURN");
 
         bgiout << setw(2) << setfill('0') << randomNumber;
@@ -817,4 +875,6 @@ void showUpdate(char ch, int randomNumber, int Position)
             outstreamxy(840,420);
         }
     }
-}
+} // END OF showUpdate() FUNCTION
+
+// END
