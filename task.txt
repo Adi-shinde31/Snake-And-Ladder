@@ -1,9 +1,0 @@
-To do : 
-
-back to startmenu after instructions
-endgame in start menu
-ppt
-instructions / end game
-update box
-update "Turn" status
-exit after game over
